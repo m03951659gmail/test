@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STICK FRUIT</title>
+    <link rel="shortcut icon" href="img/fruit/apple.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body class="w-full h-full overflow-x-hidden fixed bg-cover bg-no-repeat bg-fixed">
+    <!-- Enhanced Preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader-box"></div>
+            <div class="loader-box"></div>
+            <div class="loader-box"></div>
+            <div class="loader-box"></div>
+        </div>
+    </div>
+    <!-- Particle Effects Container -->
+    <div class="particles" id="particles"></div>
+    <div class="gaa w-full h-full absolute flex justify-center items-center">
+        <div
+            class="score w-[90px] h-[50px] bg-black opacity-80 absolute top-[30px] rounded-[10px] flex justify-center items-center hidden score-pulse">
+            <h2 class="text-[30px] text-white font-bold">0</h2>
+        </div>
+        <!-- Only restart game -->
+        <div
+            class="clkTest w-[100px] lg:w-[150px] h-[100px] lg:h-[150px] bg-red-600 text-[18px] lg:text-[28] text-white rounded-[100%] cursor-pointer justify-center items-center hidden shadow-xl">
+            <h5 class="text-center restart font-bold">RESTART</h5>
+        </div>
+        <div class="w-full h-full menue absolute z-[90] flex flex-col justify-start items-center">
+            <div class="my-[10px] menu-bg p-6 rounded-2xl shadow-2xl">
+                <h1 class="text-[30px] lg:text-[30px] font-extrabold leading-[30px] gradient-text">STICK FRUIT</h1>
+            </div>
+            <!-- Game Instructions -->
+            <div class="mt-4 text-white text-center text-sm px-4 menu-bg p-4 rounded-xl">
+                <p class="font-bold mb-2 text-lg">HOW TO PLAY:</p>
+                <p class="text-md">Click and hold to extend the stick. Release to drop it and help the hero cross the
+                    gap!</p>
+            </div>
+            <h2
+                class="mt-4  play w-[100px] lg:w-[150px] h-[100px] lg:h-[150px] bg-red-600 cursor-pointer rounded-[100%] text-center leading-[100px] lg:leading-[150px] text-[30px] lg:text-[40px] text-white font-bold shadow-2xl">
+                PLAY
+            </h2>
+            <div class="property flex justify-center mt-[20px]">
+                <ul class="aly flex justify-center">
+                    <!-- select -->
+                    <li id="char"
+                        class="menu-item w-[50px] h-[50px] mx-[10px] rounded-[100%] bg-white flex justify-center cursor-pointer shadow-lg">
+                        <div class="w-[480px] lg:w-[480px] cont hero h-auto bg-[#FDECB8] absolute flex justify-center flex-wrap rounded-[15px] hidden shadow-2xl"
+                            style="top: 60px;">
+                            <div
+                                class="w-full h-[50px] bg-[#D4F6DD] relative top-0 left-0 flex items-center rounded-t-[15px] justify-between px-4">
+                                <h4 class="text-[20px] font-bold text-gray-800">Select Fruit</h4>
+                                <button class="text-back text-[20px] font-bold text-red-600">×</button>
+                            </div>
+                            <div class="p-4 flex flex-wrap justify-center">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="clk">
+        <div class="relative sm:left-[0%] lg:left-[40%]">
+            <!-- main DIV game -->
+            <div class="w-[90000px] main h-[100vh] relative right-[0px] items-end flex duration-500 overflow-x-auto">
+                <!-- Hero character -->
+                <div class="ball bg-cover bg-no-repeat absolute bottom-[35%] left-[15px] z-50 duration-500">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/script.js"></script>
+</html>
