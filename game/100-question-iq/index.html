@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>100-Question IQ Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <!-- Safari/iOS meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#3a0ca3">
+</head>
+<body>
+    <div class="start-screen" id="start-screen">
+        <div class="logo">
+            <img src="ast/logo.png" alt="IQ Challenge Logo" class="logo-img"/>
+            <h1>IQ Challenge</h1>
+        </div>
+        <div class="start-text" id="start-text">Start to Play</div>
+    </div>
+
+    <div class="quiz-container hidden" id="quiz">
+        <div class="quiz-header">
+            <h1>Professional IQ Test</h1>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="question-count" id="question-count">Question 1 of 100</div>
+        </div>
+        
+        <div class="question-container" id="question-container">
+            <div class="question-text" id="question"></div>
+            <div class="options-container" id="options-container"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-prev" id="prev-btn" disabled>Previous</button>
+            <button class="btn btn-next" id="next-btn">Next</button>
+        </div>
+        
+        <div class="result-container" id="result-container">
+    <h2 class="result-title">Your IQ Test Results</h2>
+    <div class="percentage" id="percentage"></div>
+    <p class="score-text" id="score-text"></p>
+    <p class="iq-description" id="iq-description"></p>
+    <div class="share-buttons">
+        <button class="btn btn-share btn-facebook" id="share-facebook">
+            <i class="icon-facebook"></i> Share on Facebook
+        </button>
+        <button class="btn btn-share btn-whatsapp" id="share-whatsapp">
+            <i class="icon-whatsapp"></i> Share on WhatsApp
+        </button>
+        <button class="btn btn-share btn-twitter" id="share-twitter">
+            <i class="icon-twitter"></i> Share on X
+        </button>
+    </div>
+    <button class="btn btn-restart" id="restart-btn">Take Test Again</button>
+</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

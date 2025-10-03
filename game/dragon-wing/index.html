@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Wing</title>
+    <link href="assets/style.css" rel="stylesheet" />
+    <link rel="icon" href="assets/favicon.png" type="image/x-icon"/>
+
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loading-text">Loading Dragon Shooter...</div>
+        <div class="loading-bar">
+            <div class="loading-fill"></div>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container">
+        <!-- Game Canvas -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- UI Overlay -->
+        <div class="ui-overlay">
+            <div class="health-bar">
+                <div id="health-fill" class="health-fill"></div>
+            </div>
+            <div id="score">0</div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1>🐉 Dragon Shooter</h1>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem; text-align: center;">
+                Use arrow keys or mouse to move<br>
+                Space or click to shoot
+            </p>
+            <button id="start-button">Start Game</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen" style="display: none;">
+            <h1>Game Over</h1>
+            <p style="margin-bottom: 1rem; font-size: 1.5rem;">Final Score: <span id="final-score">0</span></p>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+    <script src="assets/script.js"></script>
+
+
+</body>
+</html>

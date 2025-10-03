@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Balloon Pop Game</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #1a237e, #0d47a1, #01579b);
+      font-size: 1.5rem;
+      user-select: none;
+      position: relative;
+      height: 100vh;
+      color: white;
+    }
+    
+    #start-screen,
+    #end-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      text-align: center;
+    }
+    
+    #start-screen h1,
+    #end-screen h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #ffd54f;
+      text-shadow: 0 0 10px rgba(255, 213, 79, 0.7);
+    }
+    
+    #start-screen button,
+    #end-screen button {
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-top: 20px;
+      background-color: #ffd54f;
+      border: none;
+      color: #0d47a1;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    #start-screen button:hover,
+    #end-screen button:hover {
+      background-color: #ffecb3;
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+    
+    #balloon-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      animation: floatUp linear;
+      cursor: pointer;
+      font-size: 80px;
+      transition: transform 0.1s;
+    }
+    
+    .balloon:hover {
+      transform: scale(1.1);
+    }
+    
+    .special-balloon {
+      animation: floatUp linear, sparkle 1s infinite alternate;
+    }
+    
+    .bomb-balloon {
+      animation: floatUp linear, shake 0.5s infinite;
+    }
+    
+    #scoreboard {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      background-color: rgba(255, 213, 79, 0.9);
+      color: #0d47a1;
+      padding: 10px 20px;
+      border-radius: 30px;
+      z-index: 3;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      display: flex;
+      gap: 20px;
+    }
+    
+    #level-indicator {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 1.2rem;
+      background-color: rgba(76, 175, 80, 0.9);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      z-index: 3;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    #power-up-container {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 15px;
+      z-index: 3;
+    }
+    
+    .power-up {
+      width: 60px;
+      height: 60px;
+      background-color: rgba(156, 39, 176, 0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .power-up:hover {
+      transform: scale(1.1);
+    }
+    
+    .power-up.active {
+      background-color: rgba(156, 39, 176, 1);
+      box-shadow: 0 0 15px rgba(156, 39, 176, 0.8);
+    }
+    
+    .power-up.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .pop-effect {
+      position: absolute;
+      pointer-events: none;
+      font-size: 30px;
+      font-weight: bold;
+      color: #ffd54f;
+      animation: popEffect 1s ease-out forwards;
+      z-index: 4;
+    }
+    
+    @keyframes floatUp {
+      from {
+        bottom: -100px;
+        opacity: 1;
+      }
+      to {
+        bottom: 110%;
+        opacity: 0.7;
+      }
+    }
+    
+    @keyframes sparkle {
+      from {
+        filter: brightness(1);
+      }
+      to {
+        filter: brightness(1.5);
+      }
+    }
+    
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-5px);
+      }
+      75% {
+        transform: translateX(5px);
+      }
+    }
+    
+    @keyframes popEffect {
+      0% {
+        transform: scale(0.5);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+    
+    .cloud {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 100px;
+      opacity: 0.7;
+      animation: drift linear infinite;
+    }
+    
+    .cloud::before,
+    .cloud::after {
+      content: '';
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 100px;
+    }
+    
+    .cloud1 {
+      width: 100px;
+      height: 40px;
+      top: 20%;
+      animation-duration: 30s;
+    }
+    
+    .cloud1::before {
+      width: 50px;
+      height: 50px;
+      top: -25px;
+      left: 10px;
+    }
+    
+    .cloud1::after {
+      width: 60px;
+      height: 40px;
+      top: -15px;
+      right: 10px;
+    }
+    
+    .cloud2 {
+      width: 80px;
+      height: 30px;
+      top: 40%;
+      animation-duration: 40s;
+      animation-delay: 5s;
+    }
+    
+    .cloud2::before {
+      width: 40px;
+      height: 40px;
+      top: -20px;
+      left: 15px;
+    }
+    
+    .cloud2::after {
+      width: 50px;
+      height: 30px;
+      top: -10px;
+      right: 15px;
+    }
+    
+    @keyframes drift {
+      from {
+        right: -200px;
+      }
+      to {
+        right: 110%;
+      }
+    }
+    
+    #instructions {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      max-width: 600px;
+      line-height: 1.6;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+    }
+    
+    #high-score {
+      margin-top: 15px;
+      font-size: 1.3rem;
+      color: #ffd54f;
+    }
+    
+    #game-over-stats {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 500px;
+    }
+    
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="start-screen">
+      <h1>🎈 Balloon Pop Game 🎈</h1>
+      <div id="instructions">
+        <p>Click on balloons to pop them and earn points!</p>
+        <p>🎈 Normal balloon: +1 point</p>
+        <p>✨ Golden balloon: +5 points</p>
+        <p>💣 Bomb balloon: -3 points</p>
+        <p>Use special powers to help you in the game!</p>
+      </div>
+      <div id="high-score">Best Score: <span id="best-score">0</span></div>
+      <button id="start-btn">Start Game</button>
+    </div>
+    
+    <div id="scoreboard" style="display: none">
+      <div>Time: <span id="time">30</span>s</div>
+      <div>Score: <span id="score">0</span></div>
+    </div>
+    
+    <div id="level-indicator" style="display: none">
+      Level: <span id="level">1</span>
+    </div>
+    
+    <div id="balloon-container">
+      <div class="cloud cloud1"></div>
+      <div class="cloud cloud2"></div>
+    </div>
+    
+    <div id="power-up-container" style="display: none">
+      <div class="power-up" id="slow-time" title="Slow Time">⏱️</div>
+      <div class="power-up" id="multi-pop" title="Multi Pop">💥</div>
+      <div class="power-up" id="freeze" title="Freeze Balloons">❄️</div>
+    </div>
+    
+    <div id="end-screen" style="display: none">
+      <h1>Game Over!</h1>
+      <p>Your Score: <span id="final-score"></span></p>
+      <div id="game-over-stats">
+        <div class="stat-row">
+          <span>Normal Balloons:</span>
+          <span id="normal-balloons">0</span>
+        </div>
+        <div class="stat-row">
+          <span>Golden Balloons:</span>
+          <span id="special-balloons">0</span>
+        </div>
+        <div class="stat-row">
+          <span>Bomb Balloons:</span>
+          <span id="bomb-balloons">0</span>
+        </div>
+        <div class="stat-row">
+          <span>Level Reached:</span>
+          <span id="final-level">1</span>
+        </div>
+      </div>
+      <button id="restart-btn">Play Again</button>
+    </div>
+    
+    <script>
+    const startScreen = document.getElementById("start-screen");
+    const endScreen = document.getElementById("end-screen");
+    const startBtn = document.getElementById("start-btn");
+    const restartBtn = document.getElementById("restart-btn");
+    const balloonContainer = document.getElementById("balloon-container");
+    const scoreboard = document.getElementById("scoreboard");
+    const levelIndicator = document.getElementById("level-indicator");
+    const powerUpContainer = document.getElementById("power-up-container");
+    const timeDisplay = document.getElementById("time");
+    const scoreDisplay = document.getElementById("score");
+    const levelDisplay = document.getElementById("level");
+    const finalScoreDisplay = document.getElementById("final-score");
+    const bestScoreDisplay = document.getElementById("best-score");
+    
+    // Game statistics
+    const normalBalloonsDisplay = document.getElementById("normal-balloons");
+    const specialBalloonsDisplay = document.getElementById("special-balloons");
+    const bombBalloonsDisplay = document.getElementById("bomb-balloons");
+    const finalLevelDisplay = document.getElementById("final-level");
+    
+    // Power-ups
+    const slowTimePowerUp = document.getElementById("slow-time");
+    const multiPopPowerUp = document.getElementById("multi-pop");
+    const freezePowerUp = document.getElementById("freeze");
+    
+    let gameInterval;
+    let timeInterval;
+    let timeLeft = 30;
+    let score = 0;
+    let level = 1;
+    let gameRunning = false;
+    let balloonSpeed = 400;
+    let slowTimeActive = false;
+    let freezeActive = false;
+    let multiPopActive = false;
+    
+    // Statistics
+    let normalBalloonsPopped = 0;
+    let specialBalloonsPopped = 0;
+    let bombBalloonsPopped = 0;
+    
+    // Load best score
+    let bestScore = localStorage.getItem("balloonGameBestScore") || 0;
+    bestScoreDisplay.textContent = bestScore;
+    
+    // Game sounds using Web Audio API
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playPopSound(frequency = 440, duration = 0.1) {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + duration);
+    }
+    
+    function playSpecialSound() {
+      playPopSound(880, 0.2);
+      setTimeout(() => playPopSound(1320, 0.2), 100);
+    }
+    
+    function playBombSound() {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.type = 'sawtooth';
+      oscillator.frequency.value = 110;
+      oscillator.frequency.exponentialRampToValueAtTime(55, audioContext.currentTime + 0.3);
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    }
+    
+    function createPopEffect(x, y, text) {
+      const effect = document.createElement("div");
+      effect.classList.add("pop-effect");
+      effect.textContent = text;
+      effect.style.left = x + "px";
+      effect.style.top = y + "px";
+      document.body.appendChild(effect);
+      
+      setTimeout(() => effect.remove(), 1000);
+    }
+    
+    function createBalloon() {
+      if (!gameRunning || freezeActive) return;
+      
+      const balloon = document.createElement("div");
+      balloon.classList.add("balloon");
+      
+      // Determine balloon type
+      const balloonType = Math.random();
+      if (balloonType < 0.1) {
+        // Bomb balloon
+        balloon.textContent = "💣";
+        balloon.classList.add("bomb-balloon");
+        balloon.dataset.type = "bomb";
+      } else if (balloonType < 0.25) {
+        // Special balloon
+        balloon.textContent = "✨";
+        balloon.classList.add("special-balloon");
+        balloon.dataset.type = "special";
+      } else {
+        // Normal balloon
+        const colors = ["🎈", "🎈", "🎈", "🎈", "🎈", "🔴", "🟡", "🟢", "🔵", "🟣"];
+        balloon.textContent = colors[Math.floor(Math.random() * colors.length)];
+        balloon.dataset.type = "normal";
+      }
+      
+      balloon.style.left = Math.random() * (window.innerWidth - 80) + "px";
+      
+      // Set balloon speed based on level
+      let duration = Math.random() * 3 + 4;
+      if (slowTimeActive) {
+        duration *= 2;
+      }
+      duration -= (level - 1) * 0.2; // Increase speed with level
+      duration = Math.max(duration, 1.5); // Minimum speed
+      
+      balloon.style.animationDuration = duration + "s";
+      
+      balloon.addEventListener("click", (e) => {
+        popBalloon(balloon, e);
+      });
+      
+      balloon.addEventListener("animationend", () => {
+        balloon.remove();
+      });
+      
+      balloonContainer.appendChild(balloon);
+    }
+    
+    function popBalloon(balloon, event) {
+      const type = balloon.dataset.type;
+      let points = 0;
+      
+      if (type === "normal") {
+        points = 1;
+        normalBalloonsPopped++;
+        playPopSound();
+      } else if (type === "special") {
+        points = 5;
+        specialBalloonsPopped++;
+        playSpecialSound();
+      } else if (type === "bomb") {
+        points = -3;
+        bombBalloonsPopped++;
+        playBombSound();
+      }
+      
+      score += points;
+      scoreDisplay.textContent = score;
+      
+      // Create points effect
+      createPopEffect(
+        event.clientX,
+        event.clientY,
+        points > 0 ? `+${points}` : `${points}`
+      );
+      
+      balloon.remove();
+      
+      // If multi-pop is active
+      if (multiPopActive && type !== "bomb") {
+        const balloons = document.querySelectorAll(".balloon");
+        if (balloons.length > 0) {
+          const randomBalloon = balloons[Math.floor(Math.random() * balloons.length)];
+          if (randomBalloon.dataset.type !== "bomb") {
+            popBalloon(randomBalloon, {
+              clientX: randomBalloon.getBoundingClientRect().left + 40,
+              clientY: randomBalloon.getBoundingClientRect().top + 40
+            });
+          }
+        }
+      }
+      
+      // Check for level up
+      checkLevelUp();
+    }
+    
+    function checkLevelUp() {
+      const newLevel = Math.floor(score / 20) + 1;
+      if (newLevel > level) {
+        level = newLevel;
+        levelDisplay.textContent = level;
+        createPopEffect(
+          window.innerWidth / 2,
+          window.innerHeight / 2,
+          `Level ${level}!`
+        );
+        
+        // Increase balloon speed
+        clearInterval(gameInterval);
+        balloonSpeed = Math.max(200, 400 - (level - 1) * 30);
+        gameInterval = setInterval(createBalloon, balloonSpeed);
+      }
+    }
+    
+    function activatePowerUp(powerUpType) {
+      if (!gameRunning) return;
+      
+      if (powerUpType === "slow-time" && !slowTimeActive) {
+        slowTimeActive = true;
+        slowTimePowerUp.classList.add("active");
+        slowTimePowerUp.classList.add("disabled");
+        
+        setTimeout(() => {
+          slowTimeActive = false;
+          slowTimePowerUp.classList.remove("active");
+        }, 5000);
+      } else if (powerUpType === "multi-pop" && !multiPopActive) {
+        multiPopActive = true;
+        multiPopPowerUp.classList.add("active");
+        multiPopPowerUp.classList.add("disabled");
+        
+        setTimeout(() => {
+          multiPopActive = false;
+          multiPopPowerUp.classList.remove("active");
+        }, 10000);
+      } else if (powerUpType === "freeze" && !freezeActive) {
+        freezeActive = true;
+        freezePowerUp.classList.add("active");
+        freezePowerUp.classList.add("disabled");
+        
+        setTimeout(() => {
+          freezeActive = false;
+          freezePowerUp.classList.remove("active");
+        }, 3000);
+      }
+    }
+    
+    function startGame() {
+      startScreen.style.display = "none";
+      scoreboard.style.display = "flex";
+      levelIndicator.style.display = "block";
+      powerUpContainer.style.display = "flex";
+      
+      gameRunning = true;
+      timeLeft = 30;
+      score = 0;
+      level = 1;
+      balloonSpeed = 400;
+      normalBalloonsPopped = 0;
+      specialBalloonsPopped = 0;
+      bombBalloonsPopped = 0;
+      
+      scoreDisplay.textContent = score;
+      levelDisplay.textContent = level;
+      timeDisplay.textContent = timeLeft;
+      
+      // Reset power-ups
+      slowTimeActive = false;
+      freezeActive = false;
+      multiPopActive = false;
+      slowTimePowerUp.classList.remove("active", "disabled");
+      multiPopPowerUp.classList.remove("active", "disabled");
+      freezePowerUp.classList.remove("active", "disabled");
+      
+      // Start balloon creation
+      gameInterval = setInterval(createBalloon, balloonSpeed);
+      
+      // Start countdown timer
+      timeInterval = setInterval(() => {
+        timeLeft--;
+        timeDisplay.textContent = timeLeft;
+        
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+    
+    function endGame() {
+      gameRunning = false;
+      clearInterval(gameInterval);
+      clearInterval(timeInterval);
+      
+      scoreboard.style.display = "none";
+      levelIndicator.style.display = "none";
+      powerUpContainer.style.display = "none";
+      endScreen.style.display = "flex";
+      
+      finalScoreDisplay.textContent = score;
+      normalBalloonsDisplay.textContent = normalBalloonsPopped;
+      specialBalloonsDisplay.textContent = specialBalloonsPopped;
+      bombBalloonsDisplay.textContent = bombBalloonsPopped;
+      finalLevelDisplay.textContent = level;
+      
+      // Update best score
+      if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem("balloonGameBestScore", bestScore);
+        bestScoreDisplay.textContent = bestScore;
+        
+        createPopEffect(
+          window.innerWidth / 2,
+          window.innerHeight / 2,
+          "New High Score!"
+        );
+      }
+    }
+    
+    // Event listeners
+    startBtn.addEventListener("click", startGame);
+    restartBtn.addEventListener("click", () => location.reload());
+    
+    slowTimePowerUp.addEventListener("click", () => activatePowerUp("slow-time"));
+    multiPopPowerUp.addEventListener("click", () => activatePowerUp("multi-pop"));
+    freezePowerUp.addEventListener("click", () => activatePowerUp("freeze"));
+    
+    // Prevent context menu on right click
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers Master</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen">
+        <div class="logo">
+            <img src="img/logo.png" alt="Checkers Logo">
+        </div>
+        <h1 class="game-title">Checkers Master</h1>
+        <button class="play-btn">Play Now</button>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container">
+        <div class="game-header">
+            <div class="timer">Time: 00:00</div>
+            <div class="turn-count">Turns: 0</div>
+        </div>
+        <div class="board" id="board"></div>
+        <div class="status" id="status">Player's turn</div>
+        <div class="controls">
+            <button class="btn new-game-btn" id="newGameBtn">New Game</button>
+        </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div class="result-screen" id="resultScreen">
+        <div class="result-content">
+            <div class="result-image">
+                <img id="resultImage" src="" alt="Result" style="width:100%;height:100%;object-fit:contain;">
+            </div>
+            <h2 class="result-title" id="resultTitle">You Win!</h2>
+            <div class="result-stats">
+                <p>Time: <span id="finalTime">00:00</span></p>
+                <p>Turns: <span id="finalTurns">0</span></p>
+            </div>
+            <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+        </div>
+    </div>
+
+    <!-- Ads Screen -->
+    <div class="ads-screen" id="adsScreen">
+        <div class="ads-content">
+            <h3 class="ads-title">Advertisement</h3>
+            <div class="ad-placeholder">
+                <!-- Replace this with your actual ad code -->
+                <img src="img/adsense.png" alt="Ad" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="countdown">close ad in <span id="countdown">5</span> seconds</div>
+            <button class="ad-close-btn" id="adCloseBtn">Close Ad</button>
+        </div>
+    </div>
+
+    <!-- Sound Toggle Button -->
+    <div class="sound-toggle" id="soundToggle">
+        <img src="img/sound.png" alt="Sound">
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="clickSound" src="sound/click.mp3"></audio>
+    <audio id="moveSound" src="sound/move.mp3"></audio>
+    <audio id="winSound" src="sound/win.mp3"></audio>
+    <audio id="loseSound" src="sound/lose.mp3"></audio>
+    <audio id="buttonSound" src="sound/button.mp3"></audio>
+    <audio id="captureSound" src="sound/capture.mp3"></audio>
+
+    
+     <script src="script.js"></script>
+</body>
+</html>

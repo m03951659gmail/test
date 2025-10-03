@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Color Connect Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        body {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(to right, #ff9a9e, #fad0c4, #fad0c4, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .info-item {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        .info-item span {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #ffcc00;
+        }
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            touch-action: none;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-gap: 4px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .cell:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .dot {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .path {
+            position: absolute;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+            width: 100%;
+            max-width: 600px;
+        }
+        button {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, #ff6b6b, #ffcc5c);
+            border: none;
+            border-radius: 50px;
+            color: #1a2a6c;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.4);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        .instructions {
+            max-width: 800px;
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .instructions h2 {
+            margin-bottom: 15px;
+            text-align: center;
+            color: #ffcc00;
+        }
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        .level-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .level-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .level-dot.active {
+            background: #ffcc00;
+            box-shadow: 0 0 10px #ffcc00;
+        }
+        .level-dot.completed {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+        .win-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .win-message.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .win-content {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(255, 204, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform 0.5s ease;
+            z-index: 20;
+            position: relative;
+        }
+        .win-message.show .win-content {
+            transform: scale(1);
+        }
+        .win-content h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .win-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .star {
+            font-size: 3rem;
+            color: #ffd700;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.5s ease;
+        }
+        .star.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .celebration {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 3s infinite ease-in-out;
+            z-index: 5;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: firework 1s ease-out forwards;
+        }
+        @keyframes firework {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+        .color-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            .grid {
+                grid-template-columns: repeat(8, 1fr);
+                grid-gap: 3px;
+            }
+            .game-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            button {
+                width: 100%;
+                max-width: 300px;
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+            .win-content h2 {
+                font-size: 2.5rem;
+            }
+            .win-content p {
+                font-size: 1.2rem;
+            }
+        }
+        /* Mobile-specific styles */
+        @media (hover: none) {
+            .cell:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1><i class="fas fa-palette"></i> Color Connect</h1>
+    <p>Connect matching colors without crossing paths</p>
+</div>
+<div class="game-info">
+    <div class="info-item">
+        Moves: <span id="moves">0</span>
+    </div>
+    <div class="info-item">
+        Time: <span id="timer">00:00</span>
+    </div>
+    <div class="info-item">
+        Level: <span id="level">1</span>
+    </div>
+</div>
+<div class="game-container">
+    <div class="grid" id="gameGrid"></div>
+</div>
+<div class="controls">
+    <button id="resetBtn"><i class="fas fa-redo"></i> Reset Board</button>
+    <button id="newGameBtn"><i class="fas fa-plus-circle"></i> New Game</button>
+    <button id="hintBtn"><i class="fas fa-lightbulb"></i> Hint</button>
+</div>
+<div class="level-indicator" id="levelIndicator"></div>
+<div class="instructions">
+    <h2>How to Play</h2>
+    <ul>
+        <li><strong>Objective:</strong> Connect all pairs of colored dots with paths</li>
+        <li><strong>Rules:</strong> Paths must not cross each other</li>
+        <li><strong>Tap</strong> on a colored dot to start drawing a path</li>
+        <li><strong>Drag</strong> to adjacent cells to extend the path</li>
+        <li><strong>Complete</strong> the path by reaching the matching colored dot</li>
+        <li><strong>Undo</strong> by moving back along your path</li>
+    </ul>
+    <p>Tip: Plan your paths carefully to avoid blocking other colors!</p>
+</div>
+<div class="win-message" id="winMessage">
+    <div class="win-content">
+        <h2>Congratulations!</h2>
+        <p>You've completed the puzzle!</p>
+        <div class="stars" id="stars">
+            <i class="fas fa-star star"></i>
+            <i class="fas fa-star star"></i>
+            <i class="fas fa-star star"></i>
+        </div>
+        <p>Moves: <span id="finalMoves">0</span></p>
+        <p>Time: <span id="finalTime">00:00</span></p>
+        <button id="nextLevelBtn"><i class="fas fa-arrow-right"></i> Next Level</button>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Game configuration
+        const config = {
+            rows: 8,
+            cols: 8,
+            colors: ['#FF5252', '#4CAF50', '#2196F3', '#FFC107', '#9C27B0', '#00BCD4'],
+            currentLevel: 1,
+            maxLevel: 12,
+            moves: 0,
+            startTime: null,
+            timerInterval: null,
+            gameActive: false,
+            completedLevels: [],
+            touchMode: 'ontouchstart' in window
+        };
+
+        // DOM elements
+        const gameGrid = document.getElementById('gameGrid');
+        const movesElement = document.getElementById('moves');
+        const timerElement = document.getElementById('timer');
+        const levelElement = document.getElementById('level');
+        const resetBtn = document.getElementById('resetBtn');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const hintBtn = document.getElementById('hintBtn');
+        const winMessage = document.getElementById('winMessage');
+        const finalMoves = document.getElementById('finalMoves');
+        const finalTime = document.getElementById('finalTime');
+        const nextLevelBtn = document.getElementById('nextLevelBtn');
+        const levelIndicator = document.getElementById('levelIndicator');
+        const stars = document.querySelectorAll('.star');
+
+        // Game state
+        let grid = [];
+        let activePath = null;
+        let completedPaths = [];
+        let isDragging = false;
+        let lastHoveredCell = null;
+
+        // حفظ حالة اللعبة
+        function saveGameState() {
+            const gameState = {
+                currentLevel: config.currentLevel,
+                completedLevels: config.completedLevels,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('colorConnectGameState', JSON.stringify(gameState));
+        }
+
+        // استعادة حالة اللعبة
+        function loadGameState() {
+            const savedState = localStorage.getItem('colorConnectGameState');
+            if (savedState) {
+                const gameState = JSON.parse(savedState);
+                config.currentLevel = gameState.currentLevel;
+                config.completedLevels = gameState.completedLevels || [];
+                return true;
+            }
+            return false;
+        }
+
+        // Initialize the game
+        function initGame() {
+            // Reset game state
+            config.moves = 0;
+            movesElement.textContent = '0';
+            config.currentLevel = Math.min(config.currentLevel, config.maxLevel);
+            levelElement.textContent = config.currentLevel;
+
+            // Clear grid
+            gameGrid.innerHTML = '';
+            grid = [];
+            completedPaths = [];
+            activePath = null;
+            isDragging = false;
+            lastHoveredCell = null;
+
+            // Create grid cells
+            for (let row = 0; row < config.rows; row++) {
+                grid[row] = [];
+                for (let col = 0; col < config.cols; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+
+                    // Add touch and mouse events
+                    cell.addEventListener('click', () => handleCellClick(row, col));
+                    cell.addEventListener('mousedown', () => handleCellMouseDown(row, col));
+                    cell.addEventListener('mouseenter', () => handleCellMouseEnter(row, col));
+
+                    // Touch events
+                    cell.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        handleCellTouchStart(row, col);
+                    }, { passive: false });
+
+                    gameGrid.appendChild(cell);
+                    grid[row][col] = {
+                        element: cell,
+                        color: null,
+                        path: null,
+                        isDot: false
+                    };
+                }
+            }
+
+            // Add global touch and mouse events
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd);
+
+            // Place colored dots
+            placeColorDots();
+
+            // Update level indicator
+            updateLevelIndicator();
+
+            // Reset timer
+            stopTimer();
+            timerElement.textContent = '00:00';
+            config.startTime = Date.now();
+            startTimer();
+            config.gameActive = true;
+        }
+
+        // Touch start handler
+        function handleCellTouchStart(row, col) {
+            handleCellClick(row, col);
+            isDragging = true;
+            lastHoveredCell = { row, col };
+        }
+
+        // Touch move handler
+        function handleTouchMove(e) {
+            if (!isDragging || !config.gameActive) return;
+            e.preventDefault();
+
+            const touch = e.touches[0];
+            const element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+            if (element && element.classList.contains('cell')) {
+                const row = parseInt(element.dataset.row);
+                const col = parseInt(element.dataset.col);
+
+                // Prevent processing same cell multiple times
+                if (lastHoveredCell && lastHoveredCell.row === row && lastHoveredCell.col === col) {
+                    return;
+                }
+
+                lastHoveredCell = { row, col };
+                handleCellHover(row, col);
+            }
+        }
+
+        // Touch end handler
+        function handleTouchEnd() {
+            isDragging = false;
+            lastHoveredCell = null;
+        }
+
+        // Mouse down handler
+        function handleCellMouseDown(row, col) {
+            isDragging = true;
+            handleCellClick(row, col);
+            lastHoveredCell = { row, col };
+        }
+
+        // Mouse move handler
+        function handleMouseMove(e) {
+            if (!isDragging || !config.gameActive) return;
+
+            const element = document.elementFromPoint(e.clientX, e.clientY);
+
+            if (element && element.classList.contains('cell')) {
+                const row = parseInt(element.dataset.row);
+                const col = parseInt(element.dataset.col);
+
+                // Prevent processing same cell multiple times
+                if (lastHoveredCell && lastHoveredCell.row === row && lastHoveredCell.col === col) {
+                    return;
+                }
+
+                lastHoveredCell = { row, col };
+                handleCellHover(row, col);
+            }
+        }
+
+        // Mouse up handler
+        function handleMouseUp() {
+            isDragging = false;
+            lastHoveredCell = null;
+        }
+
+        // Mouse enter handler
+        function handleCellMouseEnter(row, col) {
+            if (isDragging && config.gameActive) {
+                handleCellHover(row, col);
+            }
+        }
+
+        // Place colored dots on the grid
+        function placeColorDots() {
+            // Calculate number of colors based on level (easier progression)
+            const colorCount = Math.min(2 + Math.floor(config.currentLevel / 2), config.colors.length);
+            const colors = config.colors.slice(0, colorCount);
+
+            for (const color of colors) {
+                // Place two dots of the same color
+                for (let i = 0; i < 2; i++) {
+                    let placed = false;
+                    let attempts = 0;
+
+                    while (!placed && attempts < 100) {
+                        const row = Math.floor(Math.random() * config.rows);
+                        const col = Math.floor(Math.random() * config.cols);
+
+                        if (!grid[row][col].isDot) {
+                            grid[row][col].isDot = true;
+                            grid[row][col].color = color;
+
+                            const dot = document.createElement('div');
+                            dot.className = 'dot';
+                            dot.style.backgroundColor = color;
+
+                            grid[row][col].element.appendChild(dot);
+                            placed = true;
+                        }
+
+                        attempts++;
+                    }
+                }
+            }
+        }
+
+        // Handle cell click
+        function handleCellClick(row, col) {
+            if (!config.gameActive) return;
+
+            const cell = grid[row][col];
+
+            // Start a new path if clicking on a dot
+            if (cell.isDot && !cell.path) {
+                // Check if this color is already completed
+                if (completedPaths.some(path => path.color === cell.color)) return;
+
+                // Start new path
+                activePath = {
+                    color: cell.color,
+                    start: { row, col },
+                    end: null,
+                    path: [{ row, col }]
+                };
+
+                cell.path = activePath;
+                updatePathDisplay();
+
+                config.moves++;
+                movesElement.textContent = config.moves;
+            }
+        }
+
+        // Handle cell hover (for path drawing)
+        function handleCellHover(row, col) {
+            if (!activePath || !config.gameActive) return;
+
+            const lastCell = activePath.path[activePath.path.length - 1];
+
+            // Check if the cell is adjacent to the last cell in the path
+            if (Math.abs(row - lastCell.row) + Math.abs(col - lastCell.col) !== 1) {
+                return;
+            }
+
+            const cell = grid[row][col];
+
+            // Check if the cell is already part of the path (for backtracking)
+            const pathIndex = activePath.path.findIndex(p => p.row === row && p.col === col);
+
+            if (pathIndex >= 0) {
+                // Backtracking: remove all cells after this one in the path
+                activePath.path = activePath.path.slice(0, pathIndex + 1);
+            } else {
+                // Check if the cell is empty or the matching dot
+                if (cell.path || (cell.isDot && cell.color !== activePath.color)) {
+                    return;
+                }
+
+                // Add cell to path
+                activePath.path.push({ row, col });
+
+                // Check if we reached the matching dot
+                if (cell.isDot && cell.color === activePath.color) {
+                    // Complete the path
+                    activePath.end = { row, col };
+                    completedPaths.push(activePath);
+
+                    // Update display to set path for the end dot
+                    updatePathDisplay();
+
+                    // Set activePath to null after updating display
+                    activePath = null;
+
+                    // Check for win after updating display
+                    if (checkWin()) {
+                        showWinMessage();
+                    }
+                }
+            }
+
+            // Update display only if there's an active path
+            if (activePath !== null) {
+                updatePathDisplay();
+            }
+
+            // Update moves only when adding to path (not backtracking)
+            if (pathIndex === -1) {
+                config.moves++;
+                movesElement.textContent = config.moves;
+            }
+        }
+
+        // Update the visual display of paths
+        function updatePathDisplay() {
+            // Clear all paths
+            for (let row = 0; row < config.rows; row++) {
+                for (let col = 0; col < config.cols; col++) {
+                    grid[row][col].path = null;
+                    const pathElement = grid[row][col].element.querySelector('.path');
+                    if (pathElement) {
+                        grid[row][col].element.removeChild(pathElement);
+                    }
+                }
+            }
+
+            // Draw completed paths
+            completedPaths.forEach(path => {
+                drawPath(path);
+            });
+
+            // Draw active path
+            if (activePath) {
+                drawPath(activePath);
+            }
+        }
+
+        // Draw a path on the grid
+        function drawPath(path) {
+            for (let i = 0; i < path.path.length; i++) {
+                const { row, col } = path.path[i];
+                grid[row][col].path = path;
+
+                // Skip dots (they are already displayed)
+                if (grid[row][col].isDot && (i === 0 || i === path.path.length - 1)) {
+                    continue;
+                }
+
+                // Create path segment
+                const pathElement = document.createElement('div');
+                pathElement.className = 'path';
+                pathElement.style.backgroundColor = path.color;
+
+                // Add connection indicators
+                const prev = i > 0 ? path.path[i - 1] : null;
+                const next = i < path.path.length - 1 ? path.path[i + 1] : null;
+
+                if (prev && next) {
+                    // Horizontal or vertical connection
+                    if (prev.row === next.row) {
+                        pathElement.style.width = '100%';
+                        pathElement.style.height = '40%';
+                    } else if (prev.col === next.col) {
+                        pathElement.style.width = '40%';
+                        pathElement.style.height = '100%';
+                    }
+                    // Corner connection
+                    else {
+                        pathElement.style.width = '70%';
+                        pathElement.style.height = '70%';
+                        pathElement.style.borderRadius = '50%';
+                    }
+                }
+                // End of path
+                else {
+                    pathElement.style.width = '60%';
+                    pathElement.style.height = '60%';
+                    pathElement.style.borderRadius = '50%';
+                }
+
+                grid[row][col].element.appendChild(pathElement);
+            }
+        }
+
+        // Check if the player has won
+        function checkWin() {
+            // Check if all dots have paths
+            for (let row = 0; row < config.rows; row++) {
+                for (let col = 0; col < config.cols; col++) {
+                    const cell = grid[row][col];
+                    if (cell.isDot && !cell.path) {
+                        return false;
+                    }
+                }
+            }
+
+            // Check if all paths are completed (have start and end)
+            for (const path of completedPaths) {
+                if (!path.start || !path.end) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Timer functions
+        function startTimer() {
+            config.startTime = Date.now();
+            config.timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - config.startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                const seconds = (elapsed % 60).toString().padStart(2, '0');
+                timerElement.textContent = `${minutes}:${seconds}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (config.timerInterval) {
+                clearInterval(config.timerInterval);
+                config.timerInterval = null;
+            }
+        }
+
+        // Calculate stars based on performance
+        function calculateStars() {
+            const elapsed = Math.floor((Date.now() - config.startTime) / 1000);
+            const colorCount = Math.min(2 + Math.floor(config.currentLevel / 2), config.colors.length);
+            const optimalMoves = colorCount * 10; // Base optimal moves
+
+            // Calculate stars based on moves and time
+            let stars = 3;
+
+            // Deduct stars for too many moves
+            if (config.moves > optimalMoves * 1.5) {
+                stars = 1;
+            } else if (config.moves > optimalMoves * 1.2) {
+                stars = 2;
+            }
+
+            // Deduct stars for taking too long
+            if (elapsed > optimalMoves * 5) {
+                stars = Math.max(1, stars - 1);
+            }
+
+            return stars;
+        }
+
+        // Create fireworks
+        function createFireworks() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+
+                    // Random position
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+
+                    // Random color
+                    const colors = ['#FF5252', '#4CAF50', '#2196F3', '#FFC107', '#9C27B0', '#00BCD4', '#FF9800', '#E91E63'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+
+                    firework.style.left = `${x}%`;
+                    firework.style.top = `${y}%`;
+                    firework.style.backgroundColor = color;
+
+                    // Random direction
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 50 + Math.random() * 100;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+
+                    firework.style.setProperty('--tx', `${tx}px`);
+                    firework.style.setProperty('--ty', `${ty}px`);
+
+                    winMessage.appendChild(firework);
+
+                    // Remove after animation
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 1000);
+                }, i * 50);
+            }
+        }
+
+        // Show win message
+        function showWinMessage() {
+            stopTimer();
+            config.gameActive = false;
+
+            // Mark level as completed
+            if (!config.completedLevels.includes(config.currentLevel)) {
+                config.completedLevels.push(config.currentLevel);
+                // حفظ حالة اللعبة عند إكمال مستوى
+                saveGameState();
+            }
+
+            finalMoves.textContent = config.moves;
+            finalTime.textContent = timerElement.textContent;
+
+            // Calculate stars
+            const starCount = calculateStars();
+
+            // Show win message with animation
+            winMessage.classList.add('show');
+
+            // Create fewer celebration elements without hearts
+            for (let i = 0; i < 8; i++) {
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                celebration.style.left = `${Math.random() * 100}%`;
+                celebration.style.top = `${Math.random() * 100}%`;
+                celebration.style.animationDelay = `${Math.random() * 2}s`;
+
+                // Celebration icons without hearts
+                const icons = ['fa-star', 'fa-certificate', 'fa-fire', 'fa-gem', 'fa-trophy'];
+                const icon = icons[Math.floor(Math.random() * icons.length)];
+                celebration.innerHTML = `<i class="fas ${icon}"></i>`;
+
+                winMessage.appendChild(celebration);
+            }
+
+            // Create fireworks
+            createFireworks();
+
+            // Show stars with animation
+            stars.forEach((star, index) => {
+                setTimeout(() => {
+                    if (index < starCount) {
+                        star.classList.add('show');
+                    }
+                }, 1000 + index * 300);
+            });
+
+            // Play win sound (simulated with visual feedback)
+            document.body.style.animation = 'pulse 0.5s';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 500);
+        }
+
+        // Update level indicator
+        function updateLevelIndicator() {
+            levelIndicator.innerHTML = '';
+
+            for (let i = 1; i <= config.maxLevel; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'level-dot';
+
+                if (i === config.currentLevel) {
+                    dot.classList.add('active');
+                } else if (config.completedLevels.includes(i)) {
+                    dot.classList.add('completed');
+                }
+
+                levelIndicator.appendChild(dot);
+            }
+        }
+
+        // Event listeners
+        resetBtn.addEventListener('click', () => {
+            completedPaths = [];
+            activePath = null;
+            initGame();
+        });
+
+        newGameBtn.addEventListener('click', () => {
+            config.currentLevel = 1;
+            config.completedLevels = [];
+            completedPaths = [];
+            activePath = null;
+            // حفظ حالة اللعبة عند بدء لعبة جديدة
+            saveGameState();
+            initGame();
+        });
+
+        nextLevelBtn.addEventListener('click', () => {
+            winMessage.classList.remove('show');
+
+            // Clear celebration elements
+            const celebrations = winMessage.querySelectorAll('.celebration, .firework');
+            celebrations.forEach(el => el.remove());
+
+            // Reset stars
+            stars.forEach(star => star.classList.remove('show'));
+
+            // Move to next level
+            if (config.currentLevel < config.maxLevel) {
+                config.currentLevel++;
+            } else {
+                // If all levels completed, go back to level 1
+                config.currentLevel = 1;
+            }
+
+            completedPaths = [];
+            activePath = null;
+            // حفظ حالة اللعبة عند الانتقال للمستوى التالي
+            saveGameState();
+            initGame();
+        });
+
+        hintBtn.addEventListener('click', () => {
+            if (!config.gameActive) return;
+
+            // Find an incomplete color
+            const incompleteColors = [];
+            for (let row = 0; row < config.rows; row++) {
+                for (let col = 0; col < config.cols; col++) {
+                    const cell = grid[row][col];
+                    if (cell.isDot && !cell.path && !incompleteColors.includes(cell.color)) {
+                        incompleteColors.push(cell.color);
+                    }
+                }
+            }
+
+            if (incompleteColors.length > 0) {
+                const hintColor = incompleteColors[Math.floor(Math.random() * incompleteColors.length)];
+
+                // Highlight the color
+                for (let row = 0; row < config.rows; row++) {
+                    for (let col = 0; col < config.cols; col++) {
+                        if (grid[row][col].color === hintColor && grid[row][col].isDot) {
+                            grid[row][col].element.animate(
+                                [
+                                    { transform: 'scale(1)', boxShadow: '0 0 0 rgba(255,255,255,0)' },
+                                    { transform: 'scale(1.2)', boxShadow: '0 0 15px rgba(255,255,255,0.8)' },
+                                    { transform: 'scale(1)', boxShadow: '0 0 0 rgba(255,255,255,0)' }
+                                ],
+                                {
+                                    duration: 1000,
+                                    iterations: 3
+                                }
+                            );
+                        }
+                    }
+                }
+            }
+        });
+
+        // Load saved game state if available
+        const hasSavedState = loadGameState();
+
+        // Start the game
+        initGame();
+    });
+</script>
+</body>
+</html>

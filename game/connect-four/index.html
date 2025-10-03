@@ -1,0 +1,93 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Connect Four - Classic Board Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="assets/style.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="assets/connect-four.png">
+</head>
+
+<body>
+  <!-- Particle background -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Enhanced Preloader -->
+  <div id="preloader">
+    <div class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <div class="loader-text">Loading Connect Four...</div>
+  </div>
+
+  <header class="header">
+    <h1>Connect Four</h1>
+    <div class="header-decoration"></div>
+  </header>
+
+  <section class="section">
+    <div class="section-message">Ready to play? Choose your game mode!</div>
+    <canvas class="section-canvas"></canvas>
+  </section>
+
+  <div class="mode">
+    <div class="mode-chooser">
+      <div class="logo-animation">
+        <div class="circle red"></div>
+        <div class="circle yellow"></div>
+        <div class="circle red"></div>
+        <div class="circle yellow"></div>
+        <div class="circle red"></div>
+        <div class="circle yellow"></div>
+        <div class="circle red"></div>
+      </div>
+      <h1>Connect Four</h1>
+      <p class="welcome-text">Welcome to the classic Connect Four game!<br />Be the first to connect four of your
+        colored discs in a row.</p>
+      <div class="game-rules">
+        <details>
+          <summary>How to Play</summary>
+          <p>Players take turns dropping colored discs into a vertical grid.
+            The first player to connect four discs horizontally, vertically, or diagonally wins!</p>
+        </details>
+      </div>
+      <h2>Choose Game Mode</h2>
+      <div class="mode-options">
+        <label class="mode-option">
+          <input class="mode-chooser-input" type="radio" name="mode" value="offline-ai" checked>
+          <span class="option-content">
+            <span class="option-icon">🤖</span>
+            <span class="option-text">Play vs AI</span>
+          </span>
+        </label>
+        <label class="mode-option">
+          <input class="mode-chooser-input" type="radio" name="mode" value="offline-human">
+          <span class="option-content">
+            <span class="option-icon">👥</span>
+            <span class="option-text">Two Players</span>
+          </span>
+        </label>
+
+      </div>
+      <button class="mode-chooser-submit pulse">Start Game</button>
+    </div>
+  </div>
+
+  <div class="message hidden">
+    <div class="message-body">
+      <div class="message-body-content"></div>
+      <a class='message-body-dismiss' href='index.html'>OK</a>
+    </div>
+  </div>
+  <script type="text/javascript" src="assets/script.js"></script>
+
+
+</body>
+
+</html>
