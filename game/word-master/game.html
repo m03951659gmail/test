@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Master Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1 class="animate__animated animate__bounceIn">Guess the Word</h1>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-label">Level</span>
+                    <span class="stat-value" id="level">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Score</span>
+                    <span class="stat-value" id="score">0</span>
+                </div>
+                <div class="stat-item timer-item">
+                    <span class="stat-label">Time</span>
+                    <span class="stat-value" id="timer">60</span>
+                </div>
+            </div>
+            <div class="guesses-left">
+                <div class="hearts">
+                    <span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span>
+                </div>
+                <span id="remaining-guesses">6</span> guesses left
+            </div>
+        </header>
+
+        <div class="game-area">
+            <div class="word-display animate__animated animate__fadeIn" id="word-display"></div>
+            
+            <div class="hint-area">
+                <button id="hint-button" class="hint-button">💡 Get Hint</button>
+                <div id="hint-text" class="hint-text"></div>
+            </div>
+
+            <div class="guesses-info">
+                <div class="guessed-letters-container">
+                    <p>Guessed letters:</p>
+                    <div id="guessed-letters" class="guessed-letters"></div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="letter-input" maxlength="1" placeholder="Enter a letter" autocomplete="off">
+                <button id="guess-button" class="action-button">Guess</button>
+            </div>
+
+            <div class="message animate__animated" id="message"></div>
+
+            <div class="action-buttons">
+                <button id="restart-button" class="action-button restart-button">New Game</button>
+                <button id="quit-button" class="action-button quit-button">Quit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="results-modal">
+        <div class="results-content animate__animated animate__zoomIn" id="win-screen">
+            <h2 class="results-title">Congratulations!</h2>
+            <div class="results-score">
+                <span class="score-label">Your Score:</span>
+                <span class="score-value" id="final-score">0</span>
+            </div>
+            <p class="results-message" id="win-message">You're a word-guessing wizard! 🎉</p>
+            
+            <div class="social-share">
+                <button class="share-btn whatsapp">
+                    <i class="fab fa-whatsapp"></i> Share
+                </button>
+                <button class="share-btn facebook">
+                    <i class="fab fa-facebook"></i> Share
+                </button>
+                <button class="share-btn twitter">
+                    <i class="fab fa-twitter"></i> Tweet
+                </button>
+            </div>
+            
+            <button class="play-again-btn">Play Again</button>
+        </div>
+
+        <div class="results-content animate__animated animate__zoomIn" id="lose-screen" style="display:none;">
+            <h2 class="results-title">Game Over</h2>
+            <div class="results-score">
+                <span class="score-label">Your Score:</span>
+                <span class="score-value" id="lose-final-score">0</span>
+            </div>
+            <p class="results-message" id="lose-message">Don't worry, you'll do better next time!</p>
+            
+            <div class="social-share">
+                <button class="share-btn whatsapp">
+                    <i class="fab fa-whatsapp"></i> Share
+                </button>
+                <button class="share-btn facebook">
+                    <i class="fab fa-facebook"></i> Share
+                </button>
+                <button class="share-btn twitter">
+                    <i class="fab fa-twitter"></i> Tweet
+                </button>
+            </div>
+            
+            <button class="play-again-btn">Try Again</button>
+        </div>
+
+        <!-- Level Complete Screen -->
+        <div class="results-content animate__animated animate__zoomIn" id="level-complete-screen" style="display:none;">
+            <h2 class="results-title">Level Complete!</h2>
+            <div class="results-score">
+                <span class="score-value" id="level-complete-message"></span>
+            </div>
+            <p class="results-message">Ready for the next challenge?</p>
+        </div>
+        
+        <!-- Final Results Screen -->
+        <div class="results-content animate__animated animate__zoomIn" id="final-results-screen" style="display:none;">
+            <h2 class="results-title">Game Complete!</h2>
+            <div class="results-score">
+                <span class="score-label">Final Score:</span>
+                <span class="score-value" id="final-score-display">0</span>
+            </div>
+            <p class="results-message">You've mastered all levels! 🎉</p>
+            
+            <div class="social-share">
+                <button class="share-btn whatsapp">
+                    <i class="fab fa-whatsapp"></i> Share
+                </button>
+                <button class="share-btn facebook">
+                    <i class="fab fa-facebook"></i> Share
+                </button>
+                <button class="share-btn twitter">
+                    <i class="fab fa-twitter"></i> Tweet
+                </button>
+            </div>
+            
+            <button id="play-final-again-btn" class="play-again-btn">Play Again</button>
+        </div>
+    </div>
+    <!-- Audio Elements -->
+<audio id="background-audio" src="audio/music.wav" preload="auto"></audio>
+<audio id="click-sound" src="audio/click.wav" preload="auto"></audio>
+<audio id="wrong-sound" src="audio/wrong.mp3" preload="auto"></audio>
+<audio id="correct-sound" src="audio/yes.wav" preload="auto"></audio>
+<audio id="lose-sound" src="audio/lose.ogg" preload="auto"></audio>
+<audio id="win-sound" src="audio/win.ogg" preload="auto"></audio>
+<audio id="level-complete-sound" src="audio/cheer.ogg" preload="auto"></audio>
+
+<!-- Mute Button -->
+<div id="mute-button" class="mute-button">
+  <i class="fas fa-volume-up"></i>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>

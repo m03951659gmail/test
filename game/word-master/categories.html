@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Category</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="categories-container">
+        <h1 class="categories-title animate__animated animate__fadeIn">Choose a Category</h1>
+        <div class="categories-grid">
+            <div class="category-card" onclick="startGame('fruits')">
+                <img src="assets/fruits.jpg" alt="Fruits">
+                <h3>Fruits</h3>
+            </div>
+            <div class="category-card" onclick="startGame('countries')">
+                <img src="assets/countries.jpg" alt="Countries">
+                <h3>Countries</h3>
+            </div>
+            <div class="category-card" onclick="startGame('animals')">
+                <img src="assets/tiger.jpg" alt="Animals">
+                <h3>Animals</h3>
+            </div>
+            <div class="category-card" onclick="startGame('sports')">
+                <img src="assets/sports.jpg" alt="Sports">
+                <h3>Sports</h3>
+            </div>
+            <div class="category-card" onclick="startGame('music')">
+                <img src="assets/music.jpg" alt="Music Instruments">
+                <h3>Music</h3>
+            </div>
+            <div class="category-card" onclick="startGame('hobbies')">
+                <img src="assets/hobbies.jpg" alt="Hobbies">
+                <h3>Hobbies</h3>
+            </div>
+            <div class="category-card" onclick="startGame('superheroes')">
+                <img src="assets/superheroes.jpg" alt="Superheroes">
+                <h3>Superheroes</h3>
+            </div>
+            <div class="category-card" onclick="startGame('school')">
+                <img src="assets/school.jpg" alt="School Subjects">
+                <h3>School</h3>
+            </div>
+            <div class="category-card" onclick="startGame('professions')">
+                <img src="assets/professions.jpg" alt="Professions">
+                <h3>Professions</h3>
+            </div>
+            <div class="category-card" onclick="startGame('food')">
+                <img src="assets/food.jpg" alt="Food & Drinks">
+                <h3>Food & Drinks</h3>
+            </div>
+        </div>
+    </div>
+    <script>
+        function startGame(category) {
+            localStorage.setItem('selectedCategory', category);
+            window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>

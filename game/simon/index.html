@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simon Game</title>
+    
+    <!-- Stylesheet -->
+    <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+    body {
+      background-color: #2f70ff;
+    }
+    .wrapper {
+      background-color: #ffffff;
+      height: 37.5em;
+      width: 37.5em;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      border-radius: 0.5em;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .simon {
+      height: 31.25em;
+      width: 31.25em;
+      background-color: #101010;
+      border-radius: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+    }
+    .color-part {
+      height: 13.12em;
+      width: 13.12em;
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .color1 {
+      background-color: #027802;
+      border-radius: 13em 0 0 0;
+      top: 1.87em;
+      left: 1.87em;
+    }
+    .color2 {
+      background-color: #950303;
+      border-radius: 0 13em 0 0;
+      top: 1.87em;
+      right: 1.87em;
+    }
+    .color3 {
+      background-color: #01018a;
+      bottom: 1.87em;
+      right: 1.87em;
+      border-radius: 0 0 13em 0;
+    }
+    .color4 {
+      background-color: #919102;
+      bottom: 1.87em;
+      left: 1.87em;
+      border-radius: 0 0 0 13em;
+    }
+    .simon:before {
+      position: absolute;
+      content: "";
+      background-color: #101010;
+      height: 13.75em;
+      width: 13.75em;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+    }
+    #count {
+      background-color: #ffffff;
+      font-size: 2.5em;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 40%;
+      left: 50%;
+      z-index: 1;
+      height: 2em;
+      width: 3em;
+      display: grid;
+      place-items: center;
+      border-radius: 0.3em;
+      font-weight: bold;
+    }
+    #level {
+      background-color: #ffffff;
+      font-size: 1em;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 60%;
+      left: 50%;
+      z-index: 1;
+      height: 1.5em;
+      width: 5em;
+      display: grid;
+      place-items: center;
+      border-radius: 0.3em;
+      font-weight: bold;
+    }
+    .hide {
+      display: none;
+    }
+    .container {
+      background-color: #2f70ff;
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1em;
+    }
+    .container button {
+      background-color: #ffffff;
+      font-size: 1.2em;
+      border: none;
+      outline: none;
+      padding: 1em 2em;
+      border-radius: 0.3em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+    .container button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .container p {
+      font-size: 2em;
+      color: #ffffff;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+    .container span {
+      font-weight: 600;
+    }
+    .difficulty-container {
+      display: flex;
+      gap: 1em;
+      margin-top: 1em;
+    }
+    .difficulty-btn {
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      background-color: #ffffff;
+      border: none;
+      border-radius: 0.3em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .difficulty-btn.active {
+      background-color: #ffcc00;
+      font-weight: bold;
+    }
+    .stats {
+      display: flex;
+      gap: 2em;
+      margin-top: 1em;
+      color: white;
+      font-size: 1.2em;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+    @media screen and (max-width: 600px) {
+      body {
+        font-size: 10px;
+      }
+      .wrapper {
+        height: 35em;
+        width: 35em;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 0.5em;
+      }
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 style="color: white; margin-bottom: 1em;">Simon Game</h1>
+      <p id="result" class="hide">Demo Message</p>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div>High Score</div>
+          <div class="stat-value" id="highScore">0</div>
+        </div>
+        <div class="stat-item">
+          <div>Games Played</div>
+          <div class="stat-value" id="gamesPlayed">0</div>
+        </div>
+      </div>
+      
+      <div class="difficulty-container">
+        <button class="difficulty-btn active" data-level="easy">Easy</button>
+        <button class="difficulty-btn" data-level="medium">Medium</button>
+        <button class="difficulty-btn" data-level="hard">Hard</button>
+      </div>
+      
+      <button id="start">Start Game</button>
+    </div>
+    <div class="wrapper hide">
+      <div class="simon">
+        <div class="color1 color-part"></div>
+        <div class="color2 color-part"></div>
+        <div class="color3 color-part"></div>
+        <div class="color4 color-part"></div>
+        <div id="count">00</div>
+        <div id="level">Level 1</div>
+      </div>
+    </div>
+    <!-- Script -->
+    <script>
+    //Initial References
+    const countValue = document.getElementById("count");
+    const levelValue = document.getElementById("level");
+    const colorPart = document.querySelectorAll(".color-part");
+    const container = document.querySelector(".container");
+    const startButton = document.querySelector("#start");
+    const result = document.querySelector("#result");
+    const wrapper = document.querySelector(".wrapper");
+    const highScoreElement = document.getElementById("highScore");
+    const gamesPlayedElement = document.getElementById("gamesPlayed");
+    const difficultyButtons = document.querySelectorAll(".difficulty-btn");
+
+    //Mapping Colors By Creating Colors Object
+    const colors = {
+      color1: {
+        current: "#068e06",
+        new: "#11e711",
+        sound: 261.63 // C4
+      },
+      color2: {
+        current: "#950303",
+        new: "#fd2a2a",
+        sound: 329.63 // E4
+      },
+      color3: {
+        current: "#01018a",
+        new: "#2062fc",
+        sound: 392.00 // G4
+      },
+      color4: {
+        current: "#919102",
+        new: "#fafa18",
+        sound: 523.25 // C5
+      },
+    };
+
+    // Game settings based on difficulty
+    const difficultySettings = {
+      easy: {
+        speed: 800,
+        increment: 0,
+        name: "Easy"
+      },
+      medium: {
+        speed: 600,
+        increment: 50,
+        name: "Medium"
+      },
+      hard: {
+        speed: 400,
+        increment: 75,
+        name: "Hard"
+      }
+    };
+
+    // Initialize game variables
+    let randomColors = [];
+    let pathGeneratorBool = false;
+    let count,
+      clickCount = 0;
+    let currentSpeed = difficultySettings.easy.speed;
+    let currentDifficulty = "easy";
+    let gameActive = false;
+    let audioContext;
+
+    // Load saved stats
+    function loadStats() {
+      const highScore = localStorage.getItem("simonHighScore") || 0;
+      const gamesPlayed = localStorage.getItem("simonGamesPlayed") || 0;
+      
+      highScoreElement.textContent = highScore;
+      gamesPlayedElement.textContent = gamesPlayed;
+      
+      return {
+        highScore: parseInt(highScore),
+        gamesPlayed: parseInt(gamesPlayed)
+      };
+    }
+
+    // Save stats
+    function saveStats(highScore, gamesPlayed) {
+      localStorage.setItem("simonHighScore", highScore);
+      localStorage.setItem("simonGamesPlayed", gamesPlayed);
+      
+      highScoreElement.textContent = highScore;
+      gamesPlayedElement.textContent = gamesPlayed;
+    }
+
+    // Initialize audio context
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    // Play sound
+    function playSound(frequency) {
+      if (!audioContext) return;
+      
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    }
+
+    // Set difficulty
+    difficultyButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        if (gameActive) return;
+        
+        difficultyButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        
+        currentDifficulty = button.dataset.level;
+        currentSpeed = difficultySettings[currentDifficulty].speed;
+      });
+    });
+
+    //Function to start game
+    startButton.addEventListener("click", () => {
+      initAudio();
+      
+      const stats = loadStats();
+      saveStats(stats.highScore, stats.gamesPlayed + 1);
+      
+      count = 0;
+      clickCount = 0;
+      randomColors = [];
+      pathGeneratorBool = false;
+      gameActive = true;
+      currentSpeed = difficultySettings[currentDifficulty].speed;
+      
+      wrapper.classList.remove("hide");
+      container.classList.add("hide");
+      
+      pathGenerate();
+    });
+
+    //Function to decide the sequence
+    const pathGenerate = () => {
+      randomColors.push(generateRandomValue(colors));
+      count = randomColors.length;
+      pathGeneratorBool = true;
+      
+      // Update level display
+      const level = Math.floor((count - 1) / 5) + 1;
+      levelValue.innerText = `Level ${level}`;
+      
+      // Increase speed based on difficulty
+      if (difficultySettings[currentDifficulty].increment > 0) {
+        currentSpeed = Math.max(
+          200, 
+          difficultySettings[currentDifficulty].speed - 
+          (level - 1) * difficultySettings[currentDifficulty].increment
+        );
+      }
+      
+      pathDecide(count);
+    };
+
+    //Function to get a random value from object
+    const generateRandomValue = (obj) => {
+      let arr = Object.keys(obj);
+      return arr[Math.floor(Math.random() * arr.length)];
+    };
+
+    //Function to play the sequence
+    const pathDecide = async (count) => {
+      countValue.innerText = count < 10 ? "0" + count : count;
+      
+      for (let i of randomColors) {
+        let currentColor = document.querySelector(`.${i}`);
+        await delay(currentSpeed);
+        currentColor.style.backgroundColor = `${colors[i]["new"]}`;
+        playSound(colors[i].sound);
+        await delay(currentSpeed);
+        currentColor.style.backgroundColor = `${colors[i]["current"]}`;
+        await delay(currentSpeed / 2);
+      }
+      pathGeneratorBool = false;
+    };
+
+    //Delay for blink effect
+    async function delay(time) {
+      return await new Promise((resolve) => {
+        setTimeout(resolve, time);
+      });
+    }
+
+    //When user click on the colors
+    colorPart.forEach((element) => {
+      element.addEventListener("click", async (e) => {
+        //if user clicks the same color then next level
+        if (pathGeneratorBool || !gameActive) {
+          return false;
+        }
+        
+        const clickedColor = e.target.classList[0];
+        playSound(colors[clickedColor].sound);
+        
+        if (clickedColor == randomColors[clickCount]) {
+          //Color blick effect on click
+          e.target.style.backgroundColor = `${colors[clickedColor]["new"]}`;
+          await delay(300);
+          e.target.style.backgroundColor = `${colors[clickedColor]["current"]}`;
+
+          //User click
+          clickCount += 1;
+
+          //Next level if number of valid clicks == count
+          if (clickCount == count) {
+            clickCount = 0;
+            await delay(800);
+            pathGenerate();
+          }
+        } else {
+          lose();
+        }
+      });
+    });
+
+    //Function when player executes wrong sequence
+    const lose = () => {
+      gameActive = false;
+      
+      const stats = loadStats();
+      const newHighScore = count > stats.highScore ? count : stats.highScore;
+      saveStats(newHighScore, stats.gamesPlayed);
+      
+      result.innerHTML = `<span>Your Score: </span>${count}<br><span>Difficulty: </span>${difficultySettings[currentDifficulty].name}`;
+      if (count === stats.highScore && count > 0) {
+        result.innerHTML += "<br><span>New High Score! 🎉</span>";
+      }
+      
+      result.classList.remove("hide");
+      container.classList.remove("hide");
+      wrapper.classList.add("hide");
+      startButton.innerText = "Play Again";
+    };
+    
+    // Load stats on page load
+    window.onload = () => {
+      loadStats();
+    };
+    </script>
+  </body>
+</html>

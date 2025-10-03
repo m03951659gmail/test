@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Word Master</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom styles for the enhanced index page */
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            perspective: 1000px;
+            width: 100%;
+        }
+        
+        #game-container {
+            display: none;
+            width: 100vw;
+            min-height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            position: relative;
+        }
+        
+        .main-container {
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .floating-letters {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .letter {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: bold;
+            opacity: 0.2;
+            animation: float 15s linear infinite;
+            user-select: none;
+            will-change: transform;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .logo-container {
+            position: relative;
+            z-index: 10;
+            margin-bottom: 3rem;
+            transform-style: preserve-3d;
+            width: 100%;
+            max-width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        .logo-wrapper {
+            display: inline-block;
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin-bottom: 1.5rem;
+            transform-style: preserve-3d;
+            animation: floatLogo 6s ease-in-out infinite;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        
+        .logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            padding: 0;
+            box-sizing: border-box;
+            background: transparent;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+            transform: translateZ(30px);
+            transition: transform 0.5s ease;
+        }
+        
+        @keyframes floatLogo {
+            0%, 100% {
+                transform: translateY(0) rotateY(0);
+            }
+            50% {
+                transform: translateY(-20px) rotateY(10deg);
+            }
+        }
+        
+        .game-title {
+            font-size: 4rem;
+            margin: 0;
+            background: linear-gradient(to right, #fff, #f72585);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            transform: translateZ(20px);
+            animation: titleFadeIn 1s ease-out;
+        }
+        
+        @keyframes titleFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) translateZ(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(20px);
+            }
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            transform: translateZ(15px);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .start-button {
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, var(--accent), #d81159);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(247, 37, 133, 0.3);
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 10; /* Higher than floating letters */
+            transform-style: preserve-3d;
+            transform: translateZ(20px);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .logo-wrapper {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .start-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="preloader">
+        <div class="loading-container">
+            <div class="word-loader">
+                <span class="letter">W</span>
+                <span class="letter">O</span>
+                <span class="letter">R</span>
+                <span class="letter">D</span>
+                <span class="letter">M</span>
+                <span class="letter">A</span>
+                <span class="letter">S</span>
+                <span class="letter">T</span>
+                <span class="letter">E</span>
+                <span class="letter">R</span>
+            </div>
+            
+            <div class="loader-content">
+                <div class="progress-container">
+                    <div class="progress-text">Loading...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="percentage">0%</div>
+                </div>
+                
+                <div class="loading-tips">
+                    <p>Tip: You can use hints when you're stuck!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="game-container">
+        <div class="main-container">
+            <div class="floating-letters" id="floatingLetters"></div>
+            
+            <div class="logo-container animate__animated animate__fadeIn">
+                <div class="logo-wrapper">
+                    <div class="logo-circle"></div>
+                    <img src="assets/logo.png" alt="Word Master Logo" class="logo">
+                </div>
+                <h1 class="game-title">WORD MASTER</h1>
+                <p class="tagline">Challenge your vocabulary in this exciting word game!</p>
+                <button id="start-button" class="start-button">
+                    Start Game <i class="fas fa-arrow-right icon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

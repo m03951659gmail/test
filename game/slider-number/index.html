@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider Number Puzzle Game</title>
+    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" href="assets/puzzle.png">
+    <link href="assets/style.css" rel='stylesheet'>
+</head>
+
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+        <div class="preloader-text">Loading Puzzle...</div>
+    </div>
+
+    <!-- Confetti container -->
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <!-- Win modal -->
+    <div class="win-modal" id="win-modal">
+        <div class="win-content">
+            <div class="win-title">🎉 Congratulations! 🎉</div>
+            <div class="win-stats" id="win-stats"></div>
+            <button class="close-btn" onclick="closeWinModal()">Play Again</button>
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+
+        <div class="game-area">
+            <div class="main-title">Slider Puzzle</div>
+            <canvas height="320" id="slider" width="320">
+                A modern browser is required to view this game!
+            </canvas>
+        </div>
+
+        <div class="settings">
+
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-label">Moves</div>
+                    <div class="stat-value" id="moves">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Time</div>
+                    <div class="stat-value" id="time">00:00</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Quick Start</div>
+                <div class="quick-buttons">
+                    <button class="game-btn" id="slider3x3">3×3</button>
+                    <button class="game-btn" id="slider4x4">4×4</button>
+                    <button class="game-btn" id="slider5x5">5×5</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">Custom Size</div>
+                <div class="custom-controls">
+                    <select class="custom-select" id="sliderCustomWidth">
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                    <div class="x-separator">×</div>
+                    <select class="custom-select" id="sliderCustomHeight">
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+                <button class="game-btn new-game-btn" id="sliderCustomNew">New Game</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="assets/script.js"></script>
+
+
+</body>
+
+</html>

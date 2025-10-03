@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - Player vs Computer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+        	margin-top: 27px;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container {
+            background: rgba(25, 25, 45, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #00c9ff, #92fe9d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(0, 201, 255, 0.3);
+        }
+        
+        .subtitle {
+            color: #a0a0c0;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+        
+        .mode-selection {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .mode-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(40, 40, 70, 0.7);
+            color: #c0c0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(45deg, #00c9ff, #0072ff);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 201, 255, 0.4);
+        }
+        
+        .mode-btn:hover:not(.active) {
+            background: rgba(50, 50, 90, 0.8);
+            transform: translateY(-3px);
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            background: rgba(40, 40, 70, 0.7);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .player {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .player.active {
+            background: rgba(30, 30, 60, 0.9);
+            box-shadow: 0 0 15px rgba(0, 201, 255, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .player-x.active {
+            border: 2px solid #00c9ff;
+        }
+        
+        .player-o.active {
+            border: 2px solid #92fe9d;
+        }
+        
+        .player-label {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #c0c0e0;
+        }
+        
+        .player-symbol {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .player-x .player-symbol {
+            color: #00c9ff;
+            text-shadow: 0 0 10px rgba(0, 201, 255, 0.5);
+        }
+        
+        .player-o .player-symbol {
+            color: #92fe9d;
+            text-shadow: 0 0 10px rgba(146, 254, 157, 0.5);
+        }
+        
+        .player-score {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px auto;
+            max-width: 350px;
+        }
+        
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(35, 35, 65, 0.9);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cell:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: rgba(45, 45, 85, 0.9);
+        }
+        
+        .cell.x {
+            color: #00c9ff;
+        }
+        
+        .cell.o {
+            color: #92fe9d;
+        }
+        
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.05) 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .cell:hover::before {
+            opacity: 1;
+        }
+        
+        .winning-cell {
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            background: rgba(50, 50, 90, 0.9);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .message {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin: 25px 0;
+            min-height: 60px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(30, 30, 60, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .win-message {
+            color: gold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .draw-message {
+            color: #a0a0c0;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(2px);
+        }
+        
+        .restart-btn {
+            background: linear-gradient(45deg, #00c9ff, #0072ff);
+            color: white;
+        }
+        
+        .reset-btn {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 15px;
+            text-align: left;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions h3 {
+            color: #00c9ff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .instructions ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+            color: #c0c0e0;
+            position: relative;
+            padding-left: 30px;
+            line-height: 1.6;
+        }
+        
+        .instructions li:before {
+            content: '•';
+            color: #92fe9d;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+        
+        .difficulty {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .diff-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(40, 40, 70, 0.7);
+            color: #c0c0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .diff-btn.active {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: #fff;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.3rem;
+            }
+            
+            .game-board {
+                gap: 10px;
+            }
+            
+            .cell {
+                font-size: 3rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            
+            .mode-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .footer {
+            margin-top: 25px;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>TIC TAC TOE</h1>
+        <div class="subtitle">Choose your game mode: Player vs Player or Player vs Computer</div>
+    </div>
+
+    <div class="mode-selection">
+        <button class="mode-btn active" id="pvpBtn">
+            <i class="fas fa-users"></i> Player vs Player
+        </button>
+        <button class="mode-btn" id="pveBtn">
+            <i class="fas fa-robot"></i> Player vs Computer
+        </button>
+    </div>
+
+    <div class="difficulty" id="difficultyContainer">
+        <button class="diff-btn active" data-diff="easy">Easy</button>
+        <button class="diff-btn" data-diff="medium">Medium</button>
+        <button class="diff-btn" data-diff="hard">Hard</button>
+    </div>
+
+    <div class="game-info">
+        <div class="player player-x active">
+            <div class="player-label">PLAYER X</div>
+            <div class="player-symbol">X</div>
+            <div class="player-score" id="playerX">0</div>
+        </div>
+        <div class="player player-o">
+            <div class="player-label">PLAYER O</div>
+            <div class="player-symbol">O</div>
+            <div class="player-score" id="playerO">0</div>
+        </div>
+    </div>
+
+    <div class="message" id="message">
+        Player X's turn
+    </div>
+
+    <div class="game-board" id="board">
+        <div class="cell" data-cell-index="0"></div>
+        <div class="cell" data-cell-index="1"></div>
+        <div class="cell" data-cell-index="2"></div>
+        <div class="cell" data-cell-index="3"></div>
+        <div class="cell" data-cell-index="4"></div>
+        <div class="cell" data-cell-index="5"></div>
+        <div class="cell" data-cell-index="6"></div>
+        <div class="cell" data-cell-index="7"></div>
+        <div class="cell" data-cell-index="8"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn restart-btn" id="restartBtn">
+            <i class="fas fa-sync-alt"></i> Restart Game
+        </button>
+        <button class="btn reset-btn" id="resetBtn">
+            <i class="fas fa-redo"></i> Reset Scores
+        </button>
+    </div>
+
+    <div class="instructions">
+        <h3>How to Play:</h3>
+        <ul>
+            <li>The game is played on a 3x3 grid</li>
+            <li>Player X goes first, then players alternate turns</li>
+            <li>Place your symbol in an empty cell on your turn</li>
+            <li>The first player to get 3 of their symbols in a row (horizontally, vertically, or diagonally) wins</li>
+            <li>If all cells are filled with no winner, the game is a draw</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // DOM elements
+        const cells = document.querySelectorAll('.cell');
+        const messageElement = document.getElementById('message');
+        const playerXElement = document.getElementById('playerX');
+        const playerOElement = document.getElementById('playerO');
+        const restartBtn = document.getElementById('restartBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const playerXInfo = document.querySelector('.player-x');
+        const playerOInfo = document.querySelector('.player-o');
+        const pvpBtn = document.getElementById('pvpBtn');
+        const pveBtn = document.getElementById('pveBtn');
+        const diffBtns = document.querySelectorAll('.diff-btn');
+        const difficultyContainer = document.getElementById('difficultyContainer');
+
+        // Game state
+        let gameState = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let gameActive = true;
+        // Load scores from localStorage or initialize to zero
+        let scores = JSON.parse(localStorage.getItem('tictactoe_scores')) || { X: 0, O: 0 };
+        let gameMode = 'pvp'; // 'pvp' or 'pve'
+        let difficulty = 'easy'; // 'easy', 'medium', 'hard'
+
+        // Winning patterns
+        const winningPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+            [0, 4, 8], [2, 4, 6]             // diagonals
+        ];
+
+        // Messages
+        const messages = {
+            win: player => `Player ${player} wins!`,
+            draw: 'Game ended in a draw!',
+            turn: player => `Player ${player}'s turn`,
+            computer: 'Computer is thinking...'
+        };
+
+        // Update UI
+        const updateUI = () => {
+            // Update scores from localStorage
+            playerXElement.textContent = scores.X;
+            playerOElement.textContent = scores.O;
+
+            if (gameActive) {
+                messageElement.textContent = messages.turn(currentPlayer);
+                messageElement.className = 'message';
+            }
+
+            // Update active player indicator
+            if (currentPlayer === 'X') {
+                playerXInfo.classList.add('active');
+                playerOInfo.classList.remove('active');
+            } else {
+                playerOInfo.classList.add('active');
+                playerXInfo.classList.remove('active');
+            }
+
+            // Update mode buttons
+            pvpBtn.classList.toggle('active', gameMode === 'pvp');
+            pveBtn.classList.toggle('active', gameMode === 'pve');
+
+            // Show/hide difficulty based on mode
+            difficultyContainer.style.display = gameMode === 'pve' ? 'flex' : 'none';
+        };
+
+        // Check for win
+        const checkWin = () => {
+            for (const pattern of winningPatterns) {
+                const [a, b, c] = pattern;
+                if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+                    return pattern;
+                }
+            }
+            return null;
+        };
+
+        // Check for draw
+        const checkDraw = () => {
+            return !gameState.includes('') && !checkWin();
+        };
+
+        // Handle game end
+        const handleGameEnd = (winPattern = null) => {
+            gameActive = false;
+
+            if (winPattern) {
+                // Highlight winning cells
+                winPattern.forEach(index => {
+                    cells[index].classList.add('winning-cell');
+                });
+
+                // Update scores
+                scores[currentPlayer]++;
+                // Save scores to localStorage
+                localStorage.setItem('tictactoe_scores', JSON.stringify(scores));
+
+                // Show win message
+                messageElement.textContent = messages.win(currentPlayer);
+                messageElement.classList.add('win-message');
+            } else {
+                // Show draw message
+                messageElement.textContent = messages.draw;
+                messageElement.classList.add('draw-message');
+            }
+
+            updateUI();
+        };
+
+        // Computer move logic
+        const computerMove = () => {
+            if (!gameActive || currentPlayer !== 'O') return;
+
+            messageElement.textContent = messages.computer;
+
+            setTimeout(() => {
+                let move;
+
+                // Try to find a winning move
+                move = findWinningMove('O');
+                if (move !== -1) {
+                    makeMove(move);
+                    return;
+                }
+
+                // Try to block player's winning move
+                move = findWinningMove('X');
+                if (move !== -1) {
+                    makeMove(move);
+                    return;
+                }
+
+                // Difficulty-based moves
+                if (difficulty === 'hard') {
+                    // Try to take center
+                    if (gameState[4] === '') {
+                        makeMove(4);
+                        return;
+                    }
+
+                    // Try to take a corner
+                    const corners = [0, 2, 6, 8];
+                    const availableCorners = corners.filter(index => gameState[index] === '');
+                    if (availableCorners.length > 0) {
+                        move = availableCorners[Math.floor(Math.random() * availableCorners.length)];
+                        makeMove(move);
+                        return;
+                    }
+                }
+
+                // Random move for easy or as fallback
+                const availableMoves = gameState
+                    .map((cell, index) => cell === '' ? index : -1)
+                    .filter(index => index !== -1);
+
+                if (availableMoves.length > 0) {
+                    move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+                    makeMove(move);
+                }
+            }, 800); // Delay to simulate thinking
+        };
+
+        // Find a winning move for a player
+        const findWinningMove = (player) => {
+            for (const pattern of winningPatterns) {
+                const [a, b, c] = pattern;
+                const values = [gameState[a], gameState[b], gameState[c]];
+
+                // Count player symbols and empty cells
+                const playerCount = values.filter(val => val === player).length;
+                const emptyCount = values.filter(val => val === '').length;
+
+                if (playerCount === 2 && emptyCount === 1) {
+                    // Find the empty cell index
+                    if (gameState[a] === '') return a;
+                    if (gameState[b] === '') return b;
+                    if (gameState[c] === '') return c;
+                }
+            }
+            return -1;
+        };
+
+        // Make a move
+        const makeMove = (index) => {
+            if (gameState[index] !== '' || !gameActive) return;
+
+            // Update game state and UI
+            gameState[index] = currentPlayer;
+            cells[index].textContent = currentPlayer;
+            cells[index].classList.add(currentPlayer.toLowerCase());
+
+            // Check for win or draw
+            const winPattern = checkWin();
+            if (winPattern) {
+                handleGameEnd(winPattern);
+            } else if (checkDraw()) {
+                handleGameEnd();
+            } else {
+                // Switch player
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                updateUI();
+
+                // Computer's turn in PvE mode
+                if (gameMode === 'pve' && currentPlayer === 'O' && gameActive) {
+                    computerMove();
+                }
+            }
+        };
+
+        // Handle cell click
+        const handleCellClick = (e) => {
+            if (gameMode === 'pve' && currentPlayer === 'O') return; // Prevent click during computer's turn
+
+            const cell = e.target;
+            const cellIndex = parseInt(cell.getAttribute('data-cell-index'));
+            makeMove(cellIndex);
+        };
+
+        // Reset game
+        const resetGame = () => {
+            gameState = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+
+            // Reset cells
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('x', 'o', 'winning-cell');
+            });
+
+            // Start with X
+            currentPlayer = 'X';
+
+            updateUI();
+
+            // Computer goes first in PvE mode if set
+            if (gameMode === 'pve' && currentPlayer === 'O') {
+                computerMove();
+            }
+        };
+
+        // Reset scores
+        const resetScores = () => {
+            scores = { X: 0, O: 0 };
+            // Save reset scores to localStorage
+            localStorage.setItem('tictactoe_scores', JSON.stringify(scores));
+            resetGame();
+        };
+
+        // Set game mode
+        const setGameMode = (mode) => {
+            gameMode = mode;
+            resetGame();
+        };
+
+        // Set difficulty
+        const setDifficulty = (level) => {
+            difficulty = level;
+            diffBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.diff === level);
+            });
+            resetGame();
+        };
+
+        // Event listeners
+        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+        restartBtn.addEventListener('click', resetGame);
+        resetBtn.addEventListener('click', resetScores);
+        pvpBtn.addEventListener('click', () => setGameMode('pvp'));
+        pveBtn.addEventListener('click', () => setGameMode('pve'));
+        diffBtns.forEach(btn => {
+            btn.addEventListener('click', () => setDifficulty(btn.dataset.diff));
+        });
+
+        // Initialize game with saved scores
+        updateUI();
+    });
+</script>
+</body>
+</html>

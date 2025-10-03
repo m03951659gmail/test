@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        /* Welcome Screen Styles */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        
+        .welcome-screen h2 {
+            color: #333;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .settings-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 40px;
+        }
+        
+        .setting-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .setting-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .setting-card h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option {
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .option:hover {
+            border-color: #6e8efb;
+            background: #f0f4ff;
+        }
+        
+        .option.selected {
+            background: #6e8efb;
+            color: white;
+            border-color: #6e8efb;
+            transform: scale(1.05);
+        }
+        
+        .start-game-btn {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+        }
+        
+        .start-game-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(110, 142, 251, 0.6);
+        }
+        
+        .start-game-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Game Screen Styles */
+        .game-screen {
+            display: none;
+        }
+        
+        .settings {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .setting-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        select, button {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button {
+            background: #6e8efb;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            background: #5678d9;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #6e8efb, #a777e3);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .typing-area {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .typing-text {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #333;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .typing-text span {
+            position: relative;
+            transition: all 0.1s ease;
+        }
+        
+        .typing-text span.active {
+            background-color: rgba(110, 142, 251, 0.2);
+            border-radius: 3px;
+        }
+        
+        .typing-text span.correct {
+            color: #2ecc71;
+        }
+        
+        .typing-text span.incorrect {
+            color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 3px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-field:focus {
+            border-color: #6e8efb;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: #f5f7ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+        }
+        
+        .stat-box h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .result-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .result-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .result-stat {
+            background: #f5f7ff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .result-stat h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .result-stat p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .close-btn {
+            background: #e74c3c;
+        }
+        
+        .close-btn:hover {
+            background: #c0392b;
+        }
+        
+        .high-scores {
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .high-scores h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .score-list {
+            list-style: none;
+        }
+        
+        .score-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .score-list li:last-child {
+            border-bottom: none;
+        }
+        
+        @media (max-width: 768px) {
+            .settings {
+                justify-content: center;
+            }
+            
+            .stats {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .result-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .option {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="header">
+                <h1>Typing Speed Test</h1>
+                <p>Test your typing speed and accuracy</p>
+            </div>
+            
+            <div class="settings-container">
+                <div class="setting-card">
+                    <h3>Difficulty Level</h3>
+                    <div class="options" id="difficultyOptions">
+                        <div class="option" data-value="easy">Easy</div>
+                        <div class="option selected" data-value="medium">Medium</div>
+                        <div class="option" data-value="hard">Hard</div>
+                    </div>
+                </div>
+                
+                <div class="setting-card">
+                    <h3>Time Limit</h3>
+                    <div class="options" id="timeOptions">
+                        <div class="option" data-value="30">30 seconds</div>
+                        <div class="option selected" data-value="60">60 seconds</div>
+                        <div class="option" data-value="120">120 seconds</div>
+                    </div>
+                </div>
+                
+                <div class="setting-card">
+                    <h3>Text Type</h3>
+                    <div class="options" id="textTypeOptions">
+                        <div class="option selected" data-value="random">Random Words</div>
+                        <div class="option" data-value="quotes">Famous Quotes</div>
+                        <div class="option" data-value="tech">Tech Terms</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="start-game-btn" id="startGameBtn">Start Game</button>
+        </div>
+        
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <div class="header">
+                <h1>Typing Speed Test</h1>
+                <p>Test your typing speed and accuracy</p>
+            </div>
+            
+            <div class="settings">
+                <div class="setting-group">
+                    <label for="difficulty">Difficulty</label>
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="time">Time Limit</label>
+                    <select id="time">
+                        <option value="30">30 seconds</option>
+                        <option value="60" selected>60 seconds</option>
+                        <option value="120">120 seconds</option>
+                    </select>
+                </div>
+                
+                <div class="setting-group">
+                    <label for="textType">Text Type</label>
+                    <select id="textType">
+                        <option value="random" selected>Random Words</option>
+                        <option value="quotes">Famous Quotes</option>
+                        <option value="tech">Tech Terms</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            
+            <div class="typing-area">
+                <div class="typing-text" id="typingText"></div>
+                <input type="text" class="input-field" id="inputField" placeholder="Start typing here..." disabled>
+            </div>
+            
+            <div class="controls">
+                <button id="startBtn">Start Test</button>
+                <button id="resetBtn">Reset</button>
+                <button id="highScoresBtn">High Scores</button>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <h3 id="timeLeft">60</h3>
+                    <p>Time Left</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="wpm">0</h3>
+                    <p>Words Per Minute</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="cpm">0</h3>
+                    <p>Characters Per Minute</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="accuracy">100%</h3>
+                    <p>Accuracy</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="mistakes">0</h3>
+                    <p>Mistakes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <h2>Test Completed!</h2>
+            <div class="result-stats">
+                <div class="result-stat">
+                    <h3 id="finalWpm">0</h3>
+                    <p>Words Per Minute</p>
+                </div>
+                <div class="result-stat">
+                    <h3 id="finalCpm">0</h3>
+                    <p>Characters Per Minute</p>
+                </div>
+                <div class="result-stat">
+                    <h3 id="finalAccuracy">0%</h3>
+                    <p>Accuracy</p>
+                </div>
+                <div class="result-stat">
+                    <h3 id="finalMistakes">0</h3>
+                    <p>Mistakes</p>
+                </div>
+            </div>
+            <button id="closeResultBtn" class="close-btn">Close</button>
+        </div>
+    </div>
+    
+    <div class="result-modal" id="highScoresModal">
+        <div class="result-content">
+            <h2>High Scores</h2>
+            <div class="high-scores">
+                <h3>Top Scores</h3>
+                <ul class="score-list" id="scoreList">
+                    <li>No scores yet</li>
+                </ul>
+            </div>
+            <button id="closeScoresBtn" class="close-btn">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        // Text collections for different categories
+        const textCollections = {
+            random: [
+                "Their politician was, in this moment, a notour paperback. The first armless grouse is, in its own way, a gear. The coat is a wash. However, a cake is the llama of a caravan. Snakelike armies show us how playgrounds can be viscoses. Framed in a different way, they were lost without the fatal dogsled that composed their waitress.",
+                "Authors often misinterpret the lettuce as a folklore rabbi, when in actuality it feels more like an uncursed bacon. Pursued distances show us how mother-in-laws can be charleses. Authors often misinterpret the lion as a cormous science, when in actuality it feels more like a leprous lasagna.",
+                "In modern times the first scrawny kitten is, in its own way, an input. An ostrich is the beginner of a roast. An appressed exhaust is a gun of the mind. A recorder is a grade from the right perspective. A hygienic is the cowbell of a skin.",
+                "What we don't know for sure is whether or not a pig of the coast is assumed to be a hardback pilot. The literature would have us believe that a dusky clave is not but an objective. Few can name a limbate leo that isn't a sunlit silver.",
+                "An aunt is a bassoon from the right perspective. As far as we can estimate, some posit the melic myanmar to be less than kutcha. One cannot separate foods from blowzy bows. The scampish closet reveals itself as a sclerous llama to those who look."
+            ],
+            quotes: [
+                "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it.",
+                "Innovation distinguishes between a leader and a follower. Your time is limited, so don't waste it living someone else's life. Don't be trapped by dogma, which is living with the results of other people's thinking.",
+                "The future belongs to those who believe in the beauty of their dreams. The only impossible journey is the one you never begin. Success is not final, failure is not fatal: It is the courage to continue that counts.",
+                "Life is what happens when you're busy making other plans. The purpose of our lives is to be happy. You only live once, but if you do it right, once is enough.",
+                "In the end, it's not the years in your life that count. It's the life in your years. The greatest glory in living lies not in never falling, but in rising every time you fall."
+            ],
+            tech: [
+                "Artificial intelligence is a branch of computer science that aims to create intelligent machines. Machine learning is a subset of AI that enables systems to learn and improve from experience without being explicitly programmed.",
+                "Cloud computing delivers computing services over the internet. These services include servers, storage, databases, networking, software, analytics, and intelligence. Cloud computing offers faster innovation and flexible resources.",
+                "Blockchain is a distributed, immutable ledger that facilitates the process of recording transactions and tracking assets in a business network. An asset can be tangible or intangible.",
+                "Cybersecurity is the practice of defending computers, servers, mobile devices, electronic systems, networks, and data from malicious attacks. It's also known as information technology security or electronic information security.",
+                "DevOps is a set of practices that combines software development and IT operations. It aims to shorten the systems development life cycle and provide continuous delivery with high software quality."
+            ]
+        };
+        
+        // DOM elements
+        const welcomeScreen = document.getElementById("welcomeScreen");
+        const gameScreen = document.getElementById("gameScreen");
+        const startGameBtn = document.getElementById("startGameBtn");
+        const typingText = document.getElementById("typingText");
+        const inputField = document.getElementById("inputField");
+        const startBtn = document.getElementById("startBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const highScoresBtn = document.getElementById("highScoresBtn");
+        const timeTag = document.getElementById("timeLeft");
+        const mistakeTag = document.getElementById("mistakes");
+        const wpmTag = document.getElementById("wpm");
+        const cpmTag = document.getElementById("cpm");
+        const accuracyTag = document.getElementById("accuracy");
+        const progressBar = document.getElementById("progress");
+        const difficultySelect = document.getElementById("difficulty");
+        const timeSelect = document.getElementById("time");
+        const textTypeSelect = document.getElementById("textType");
+        const resultModal = document.getElementById("resultModal");
+        const highScoresModal = document.getElementById("highScoresModal");
+        const closeResultBtn = document.getElementById("closeResultBtn");
+        const closeScoresBtn = document.getElementById("closeScoresBtn");
+        const scoreList = document.getElementById("scoreList");
+        
+        // Option elements
+        const difficultyOptions = document.querySelectorAll("#difficultyOptions .option");
+        const timeOptions = document.querySelectorAll("#timeOptions .option");
+        const textTypeOptions = document.querySelectorAll("#textTypeOptions .option");
+        
+        // Game variables
+        let timer;
+        let maxTime = 60;
+        let timeLeft = maxTime;
+        let charIndex = 0;
+        let mistakes = 0;
+        let isTyping = false;
+        let correctChars = 0;
+        let totalChars = 0;
+        
+        // Initialize high scores from localStorage
+        let highScores = JSON.parse(localStorage.getItem("typingHighScores")) || [];
+        
+        // Handle option selection on welcome screen
+        difficultyOptions.forEach(option => {
+            option.addEventListener("click", () => {
+                difficultyOptions.forEach(opt => opt.classList.remove("selected"));
+                option.classList.add("selected");
+                difficultySelect.value = option.dataset.value;
+            });
+        });
+        
+        timeOptions.forEach(option => {
+            option.addEventListener("click", () => {
+                timeOptions.forEach(opt => opt.classList.remove("selected"));
+                option.classList.add("selected");
+                timeSelect.value = option.dataset.value;
+                maxTime = parseInt(option.dataset.value);
+                timeLeft = maxTime;
+                timeTag.innerText = timeLeft;
+            });
+        });
+        
+        textTypeOptions.forEach(option => {
+            option.addEventListener("click", () => {
+                textTypeOptions.forEach(opt => opt.classList.remove("selected"));
+                option.classList.add("selected");
+                textTypeSelect.value = option.dataset.value;
+            });
+        });
+        
+        // Transition from welcome screen to game screen
+        startGameBtn.addEventListener("click", () => {
+            welcomeScreen.style.display = "none";
+            gameScreen.style.display = "block";
+            resetGame();
+            loadParagraph();
+        });
+        
+        // Load a random paragraph based on selected text type
+        function loadParagraph() {
+            const textType = textTypeSelect.value;
+            const collection = textCollections[textType];
+            const ranIndex = Math.floor(Math.random() * collection.length);
+            
+            // Apply difficulty modifications
+            let text = collection[ranIndex];
+            if (difficultySelect.value === "easy") {
+                // For easy mode, use shorter sentences
+                text = text.split('.').slice(0, 2).join('.') + '.';
+            } else if (difficultySelect.value === "hard") {
+                // For hard mode, combine two paragraphs
+                const secondIndex = (ranIndex + 1) % collection.length;
+                text = text + ' ' + collection[secondIndex];
+            }
+            
+            typingText.innerHTML = "";
+            text.split("").forEach(char => {
+                let span = `<span>${char}</span>`;
+                typingText.innerHTML += span;
+            });
+            
+            typingText.querySelectorAll("span")[0].classList.add("active");
+            totalChars = text.length;
+            
+            // Reset progress bar
+            progressBar.style.width = "0%";
+        }
+        
+        // Start the typing test
+        function startTest() {
+            if (isTyping) return;
+            
+            // Reset game state
+            resetGame();
+            loadParagraph();
+            
+            // Enable input field and focus
+            inputField.disabled = false;
+            inputField.focus();
+            startBtn.textContent = "Test in Progress...";
+            startBtn.disabled = true;
+        }
+        
+        // Initialize typing
+        function initTyping() {
+            const characters = typingText.querySelectorAll("span");
+            const typedChar = inputField.value.split("")[charIndex];
+            
+            if (charIndex < characters.length - 1 && timeLeft > 0) {
+                if (!isTyping) {
+                    timer = setInterval(initTimer, 1000);
+                    isTyping = true;
+                }
+                
+                if (typedChar == null) {
+                    // Handle backspace
+                    if (charIndex > 0) {
+                        charIndex--;
+                        if (characters[charIndex].classList.contains("incorrect")) {
+                            mistakes--;
+                        } else if (characters[charIndex].classList.contains("correct")) {
+                            correctChars--;
+                        }
+                        characters[charIndex].classList.remove("correct", "incorrect");
+                    }
+                } else {
+                    // Handle character input
+                    if (characters[charIndex].innerText === typedChar) {
+                        characters[charIndex].classList.add("correct");
+                        correctChars++;
+                    } else {
+                        mistakes++;
+                        characters[charIndex].classList.add("incorrect");
+                    }
+                    charIndex++;
+                }
+                
+                // Update active character
+                characters.forEach(span => span.classList.remove("active"));
+                if (charIndex < characters.length) {
+                    characters[charIndex].classList.add("active");
+                }
+                
+                // Update stats
+                updateStats();
+                
+                // Update progress bar
+                const progress = (charIndex / totalChars) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Check if test is complete
+                if (charIndex >= characters.length - 1) {
+                    clearInterval(timer);
+                    showResults();
+                }
+            } else {
+                clearInterval(timer);
+                showResults();
+            }
+        }
+        
+        // Initialize timer
+        function initTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                timeTag.innerText = timeLeft;
+                updateStats();
+            } else {
+                clearInterval(timer);
+                showResults();
+            }
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const timeElapsed = maxTime - timeLeft;
+            const minutes = timeElapsed / 60;
+            
+            // Calculate WPM
+            const wordsTyped = (charIndex - mistakes) / 5;
+            const wpm = minutes > 0 ? Math.round(wordsTyped / minutes) : 0;
+            wpmTag.innerText = wpm;
+            
+            // Calculate CPM
+            const cpm = minutes > 0 ? Math.round((charIndex - mistakes) / minutes) : 0;
+            cpmTag.innerText = cpm;
+            
+            // Calculate accuracy
+            const accuracy = charIndex > 0 ? Math.round(((charIndex - mistakes) / charIndex) * 100) : 100;
+            accuracyTag.innerText = `${accuracy}%`;
+            
+            // Update mistakes
+            mistakeTag.innerText = mistakes;
+        }
+        
+        // Reset the game
+        function resetGame() {
+            clearInterval(timer);
+            timeLeft = parseInt(timeSelect.value);
+            maxTime = timeLeft;
+            charIndex = 0;
+            mistakes = 0;
+            isTyping = false;
+            correctChars = 0;
+            
+            inputField.value = "";
+            inputField.disabled = true;
+            startBtn.textContent = "Start Test";
+            startBtn.disabled = false;
+            
+            timeTag.innerText = timeLeft;
+            wpmTag.innerText = 0;
+            cpmTag.innerText = 0;
+            accuracyTag.innerText = "100%";
+            mistakeTag.innerText = 0;
+            progressBar.style.width = "0%";
+        }
+        
+        // Show results modal
+        function showResults() {
+            const finalWpm = wpmTag.innerText;
+            const finalCpm = cpmTag.innerText;
+            const finalAccuracy = accuracyTag.innerText;
+            const finalMistakes = mistakeTag.innerText;
+            
+            document.getElementById("finalWpm").innerText = finalWpm;
+            document.getElementById("finalCpm").innerText = finalCpm;
+            document.getElementById("finalAccuracy").innerText = finalAccuracy;
+            document.getElementById("finalMistakes").innerText = finalMistakes;
+            
+            // Save high score
+            const score = {
+                wpm: parseInt(finalWpm),
+                accuracy: parseInt(finalAccuracy),
+                date: new Date().toLocaleDateString()
+            };
+            
+            highScores.push(score);
+            highScores.sort((a, b) => b.wpm - a.wpm);
+            highScores = highScores.slice(0, 5); // Keep only top 5
+            localStorage.setItem("typingHighScores", JSON.stringify(highScores));
+            
+            resultModal.style.display = "flex";
+        }
+        
+        // Show high scores modal
+        function showHighScores() {
+            if (highScores.length === 0) {
+                scoreList.innerHTML = "<li>No scores yet</li>";
+            } else {
+                scoreList.innerHTML = "";
+                highScores.forEach((score, index) => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <span>#${index + 1}: ${score.wpm} WPM (${score.accuracy}% accuracy)</span>
+                        <span>${score.date}</span>
+                    `;
+                    scoreList.appendChild(li);
+                });
+            }
+            
+            highScoresModal.style.display = "flex";
+        }
+        
+        // Event listeners
+        startBtn.addEventListener("click", startTest);
+        resetBtn.addEventListener("click", resetGame);
+        highScoresBtn.addEventListener("click", showHighScores);
+        closeResultBtn.addEventListener("click", () => {
+            resultModal.style.display = "none";
+            resetGame();
+        });
+        closeScoresBtn.addEventListener("click", () => {
+            highScoresModal.style.display = "none";
+        });
+        
+        inputField.addEventListener("input", initTyping);
+        
+        // Focus input field when clicking on typing text
+        typingText.addEventListener("click", () => {
+            if (!inputField.disabled) {
+                inputField.focus();
+            }
+        });
+        
+        // Handle time limit change
+        timeSelect.addEventListener("change", () => {
+            maxTime = parseInt(timeSelect.value);
+            timeLeft = maxTime;
+            timeTag.innerText = timeLeft;
+        });
+        
+        // Initialize the game
+        resetGame();
+        loadParagraph();
+    </script>
+</body>
+</html>
