@@ -1,0 +1,77 @@
+/* ===== ONLINE GAMES SPECIFIC STYLES ===== */
+
+.online-badge {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background-color: #4caf50;
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.game-card.online-game {
+    position: relative;
+}
+
+.game-card.online-game::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4caf50, #8bc34a);
+}
+
+/* Loading animation for online games */
+.game-card.online-game.loading .game-card-image {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Online game hover effects */
+.game-card.online-game:hover .game-card-image {
+    filter: brightness(1.1);
+}
+
+/* Network error message for online games */
+.network-error {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin: var(--spacing-md) 0;
+    text-align: center;
+    border-left: 4px solid #c62828;
+}
+
+[data-theme="dark"] .network-error {
+    background-color: #3d1e1e;
+    color: #ef5350;
+    border-left-color: #ef5350;
+}
+
+/* Online games count badge */
+.online-count {
+    background-color: #4caf50;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: var(--spacing-sm);
+    font-weight: 700;
+}

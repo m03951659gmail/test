@@ -1,0 +1,42 @@
+[
+  {
+    "id": "offline-1",
+    "name": "Tic Tac Toe",
+    "description": "Classic tic-tac-toe game. Play against AI or with a friend!",
+    "url": "offline-games/tic-tac-toe/index.html",
+    "icon": "offlineicon/tic-tac-toe/icon.png",
+    "category": "puzzle"
+  },
+  {
+    "id": "offline-2",
+    "name": "Memory Match",
+    "description": "Test your memory by matching pairs of cards in this classic game!",
+    "url": "offline-games/memory-match/index.html",
+    "icon": "offlineicon/memory-match/icon.png",
+    "category": "puzzle"
+  },
+  {
+    "id": "offline-3",
+    "name": "Snake Classic",
+    "description": "The classic snake game! Eat food and grow without hitting the walls!",
+    "url": "offline-games/snake/index.html",
+    "icon": "offlineicon/snake/icon.png",
+    "category": "arcade"
+  },
+  {
+    "id": "offline-4",
+    "name": "Brick Breaker",
+    "description": "Break all the bricks with your paddle and ball in this classic game!",
+    "url": "offline-games/brick-breaker/index.html",
+    "icon": "offlineicon/brick-breaker/icon.png",
+    "category": "arcade"
+  },
+  {
+    "id": "offline-5",
+    "name": "Flappy Bird",
+    "description": "Tap to fly and navigate through pipes in this challenging game!",
+    "url": "offline-games/flappy-bird/index.html",
+    "icon": "offlineicon/flappy-bird/icon.png",
+    "category": "casual"
+  }
+]

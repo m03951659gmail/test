@@ -1,0 +1,110 @@
+/* ===== OFFLINE GAMES SPECIFIC STYLES ===== */
+
+.offline-badge {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background-color: #ff9800;
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.game-card.offline-game {
+    position: relative;
+}
+
+.game-card.offline-game::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff9800, #ffc107);
+}
+
+/* Offline mode message */
+.offline-message {
+    background-color: #fff3e0;
+    color: #e65100;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    margin: var(--spacing-lg) 0;
+    text-align: center;
+    border-left: 4px solid #ff9800;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .offline-message {
+    background-color: #3d2e1e;
+    color: #ffb74d;
+    border-left-color: #ff9800;
+}
+
+/* Offline game icon styling */
+.game-card.offline-game .game-card-image {
+    border-bottom: 2px solid #ff9800;
+}
+
+/* Download/Cache indicator */
+.cache-indicator {
+    position: absolute;
+    bottom: var(--spacing-sm);
+    left: var(--spacing-sm);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cache-indicator.cached::before {
+    content: '✓';
+    font-weight: 700;
+}
+
+/* Offline games count badge */
+.offline-count {
+    background-color: #ff9800;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: var(--spacing-sm);
+    font-weight: 700;
+}
+
+/* Offline availability notice */
+.offline-notice {
+    background-color: var(--bg-secondary);
+    border: 2px solid #ff9800;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.offline-notice-icon {
+    font-size: 2rem;
+}
+
+.offline-notice-text h3 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.offline-notice-text p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
