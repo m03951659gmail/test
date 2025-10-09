@@ -2,7 +2,7 @@
   "name": "Gaming Platform - Play Free Online Games",
   "short_name": "GamingHub",
   "description": "Play thousands of free online games instantly. Works offline with PWA support!",
-  "start_url": "/",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#6366f1",
