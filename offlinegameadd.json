@@ -1,0 +1,42 @@
+[
+  {
+    "id": "offline-1",
+    "name": "Tic Tac Toe",
+    "description": "Classic Tic Tac Toe game - playable offline!",
+    "url": "offline-games/tic-tac-toe/index.html",
+    "icon": "offlineicon/tic-tac-toe/icon.png",
+    "category": "puzzle"
+  },
+  {
+    "id": "offline-2",
+    "name": "Snake Game",
+    "description": "Classic snake game - no internet required!",
+    "url": "offline-games/snake/index.html",
+    "icon": "offlineicon/snake/icon.png",
+    "category": "arcade"
+  },
+  {
+    "id": "offline-3",
+    "name": "Memory Match",
+    "description": "Test your memory with this card matching game!",
+    "url": "offline-games/memory-match/index.html",
+    "icon": "offlineicon/memory-match/icon.png",
+    "category": "puzzle"
+  },
+  {
+    "id": "offline-4",
+    "name": "Tetris Classic",
+    "description": "The classic block puzzle game - play anytime!",
+    "url": "offline-games/tetris/index.html",
+    "icon": "offlineicon/tetris/icon.png",
+    "category": "puzzle"
+  },
+  {
+    "id": "offline-5",
+    "name": "Pong",
+    "description": "Classic ping pong arcade game!",
+    "url": "offline-games/pong/index.html",
+    "icon": "offlineicon/pong/icon.png",
+    "category": "arcade"
+  }
+]

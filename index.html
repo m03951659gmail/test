@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play thousands of free online games instantly. No downloads required. Including action, puzzle, racing, shooting games and more!">
+    <meta name="keywords" content="free games, online games, play games, browser games, html5 games, offline games">
+    <meta name="author" content="Game Portal">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Game Portal - Free Online Games">
+    <meta property="og:description" content="Play thousands of free online games instantly. No downloads required.">
+    <meta property="og:image" content="/icon/icon-512.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Game Portal - Free Online Games">
+    <meta property="twitter:description" content="Play thousands of free online games instantly. No downloads required.">
+    
+    <title>Game Portal - Free Online & Offline Games</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/icon/icon-192.png">
+    <link rel="apple-touch-icon" href="/icon/icon-192.png">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="online.css">
+    <link rel="stylesheet" href="offline.css">
+</head>
+<body>
+    <!-- PWA Install Banner -->
+    <div id="pwa-install-banner" class="pwa-banner hidden">
+        <div class="pwa-banner-content">
+            <div class="pwa-banner-text">
+                <h3>Install Game Portal</h3>
+                <p>Install our app for offline gaming and quick access!</p>
+            </div>
+            <div class="pwa-banner-buttons">
+                <button id="pwa-install-btn" class="btn-primary">Install</button>
+                <button id="pwa-close-btn" class="btn-secondary">Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Viewer (Iframe) -->
+    <div id="game-viewer" class="game-viewer hidden">
+        <div class="game-viewer-header">
+            <button id="close-game-btn" class="btn-icon" title="Close Game">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                <span>Back</span>
+            </button>
+            <span id="game-title" class="game-viewer-title"></span>
+            <button id="fullscreen-game-btn" class="btn-icon" title="Toggle Fullscreen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+                <span>Fullscreen</span>
+            </button>
+        </div>
+        <iframe id="game-iframe" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <h1 class="logo">🎮 Game Portal</h1>
+                    <div class="header-actions">
+                        <button id="theme-toggle" class="btn-icon" title="Toggle Theme">
+                            <svg id="theme-icon-sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="5"/>
+                                <line x1="12" y1="1" x2="12" y2="3"/>
+                                <line x1="12" y1="21" x2="12" y2="23"/>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                <line x1="1" y1="12" x2="3" y2="12"/>
+                                <line x1="21" y1="12" x2="23" y2="12"/>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                            </svg>
+                            <svg id="theme-icon-moon" class="hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search Bar -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-wrapper">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="search-input" class="search-input" placeholder="Search games...">
+                </div>
+            </div>
+        </section>
+
+        <!-- Network Status -->
+        <div id="network-status" class="network-status hidden">
+            <span id="network-message"></span>
+        </div>
+
+        <!-- Categories -->
+        <section class="categories-section">
+            <div class="container">
+                <div class="categories-wrapper">
+                    <button class="category-btn active" data-category="all">All Games</button>
+                    <!-- Categories will be dynamically added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Games -->
+        <section id="recent-section" class="games-section hidden">
+            <div class="container">
+                <h2 class="section-title">Recently Played</h2>
+                <div id="recent-games" class="games-grid"></div>
+            </div>
+        </section>
+
+        <!-- Games Grid -->
+        <section class="games-section">
+            <div class="container">
+                <h2 class="section-title" id="games-section-title">All Games</h2>
+                <div id="games-grid" class="games-grid"></div>
+                <div id="loading-spinner" class="loading-spinner hidden">
+                    <div class="spinner"></div>
+                    <p>Loading more games...</p>
+                </div>
+                <div id="no-results" class="no-results hidden">
+                    <p>No games found. Try a different search term or category.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="index.js"></script>
+    <script src="online.js"></script>
+    <script src="offline.js"></script>
+    <script src="pwa-install.js"></script>
+</body>
+</html>

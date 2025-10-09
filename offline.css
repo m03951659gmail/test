@@ -1,0 +1,90 @@
+/* Offline-specific styles */
+
+.offline-mode {
+    background-color: #fef3c7;
+}
+
+[data-theme="dark"] .offline-mode {
+    background-color: #78350f;
+}
+
+.offline-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #f59e0b;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.offline-banner {
+    background-color: #fbbf24;
+    color: #78350f;
+    text-align: center;
+    padding: 0.75rem;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .offline-banner {
+    background-color: #d97706;
+    color: #fef3c7;
+}
+
+.offline-game-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: #f59e0b;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.offline-section {
+    background-color: var(--surface-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.offline-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+}
+
+.offline-games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Offline availability indicator */
+.available-offline::after {
+    content: '📥';
+    margin-left: 0.5rem;
+}
+
+/* Cached data indicator */
+.cached-game {
+    position: relative;
+}
+
+.cached-game::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #10b981, #059669);
+}

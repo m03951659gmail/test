@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Icon Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .preview-item {
+            text-align: center;
+        }
+        .preview-item canvas {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            max-width: 100%;
+        }
+        .preview-item p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #666;
+        }
+        .instructions {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 PWA Icon Generator</h1>
+        
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ol>
+                <li>Enter your icon text (emoji or text)</li>
+                <li>Choose background and text colors</li>
+                <li>Click "Generate Icons"</li>
+                <li>Right-click each icon to save</li>
+                <li>Save with the filename shown below each icon</li>
+            </ol>
+        </div>
+
+        <div class="controls">
+            <label for="iconText">Icon Text/Emoji:</label>
+            <input type="text" id="iconText" value="🎮" maxlength="2">
+
+            <label for="bgColor">Background Color:</label>
+            <input type="color" id="bgColor" value="#6366f1">
+
+            <label for="textColor">Text Color:</label>
+            <input type="color" id="textColor" value="#ffffff">
+
+            <button onclick="generateIcons()">Generate Icons</button>
+        </div>
+
+        <div class="preview" id="preview"></div>
+    </div>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+
+        function generateIcons() {
+            const iconText = document.getElementById('iconText').value || '🎮';
+            const bgColor = document.getElementById('bgColor').value;
+            const textColor = document.getElementById('textColor').value;
+            const preview = document.getElementById('preview');
+            
+            preview.innerHTML = '';
+
+            sizes.forEach(size => {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                // Draw background
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, size, size);
+
+                // Draw text/emoji
+                const fontSize = size * 0.6;
+                ctx.font = `${fontSize}px Arial`;
+                ctx.fillStyle = textColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(iconText, size / 2, size / 2);
+
+                // Create preview item
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                item.innerHTML = `
+                    <canvas width="${size}" height="${size}"></canvas>
+                    <p>icon-${size}.png</p>
+                    <button onclick="downloadIcon('${size}')">Download</button>
+                `;
+                
+                const previewCanvas = item.querySelector('canvas');
+                const previewCtx = previewCanvas.getContext('2d');
+                previewCtx.drawImage(canvas, 0, 0, size, size, 0, 0, size, size);
+                
+                preview.appendChild(item);
+
+                // Store canvas for download
+                window[`canvas_${size}`] = canvas;
+            });
+        }
+
+        function downloadIcon(size) {
+            const canvas = window[`canvas_${size}`];
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Generate default icons on load
+        window.onload = generateIcons;
+    </script>
+</body>
+</html>

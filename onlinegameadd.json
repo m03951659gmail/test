@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+    "name": "Subway Surfers",
+    "description": "Dash through the subway tracks and avoid obstacles in this endless runner game!",
+    "url": "https://example.com/subway-surfers",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "action"
+  },
+  {
+    "id": "2",
+    "name": "2048 Puzzle",
+    "description": "Combine tiles with the same numbers to reach 2048!",
+    "url": "https://example.com/2048",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "puzzle"
+  },
+  {
+    "id": "3",
+    "name": "Racing Thunder",
+    "description": "Experience high-speed racing action on challenging tracks!",
+    "url": "https://example.com/racing-thunder",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "racing"
+  },
+  {
+    "id": "4",
+    "name": "Bubble Shooter",
+    "description": "Pop colorful bubbles in this classic arcade game!",
+    "url": "https://example.com/bubble-shooter",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "puzzle"
+  },
+  {
+    "id": "5",
+    "name": "Space Invaders",
+    "description": "Defend Earth from alien invaders in this classic shooter!",
+    "url": "https://example.com/space-invaders",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "shooting"
+  },
+  {
+    "id": "6",
+    "name": "Mahjong Classic",
+    "description": "Match tiles in this relaxing puzzle game!",
+    "url": "https://example.com/mahjong",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "puzzle"
+  },
+  {
+    "id": "7",
+    "name": "Tank Battle",
+    "description": "Engage in epic tank warfare and dominate the battlefield!",
+    "url": "https://example.com/tank-battle",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "action"
+  },
+  {
+    "id": "8",
+    "name": "Chess Master",
+    "description": "Test your strategic skills in this classic board game!",
+    "url": "https://example.com/chess",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "strategy"
+  },
+  {
+    "id": "9",
+    "name": "Soccer Stars",
+    "description": "Score amazing goals in this fun soccer game!",
+    "url": "https://example.com/soccer-stars",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "sports"
+  },
+  {
+    "id": "10",
+    "name": "Fruit Ninja",
+    "description": "Slice fruits and avoid bombs in this addictive game!",
+    "url": "https://example.com/fruit-ninja",
+    "icon": "https://img.gamedistribution.com/bb65344d29f74da1bd1f41500d8b1dc2.jpg",
+    "category": "arcade"
+  }
+]
