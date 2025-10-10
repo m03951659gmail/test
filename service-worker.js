@@ -15,6 +15,50 @@ const CORE_ASSETS = [
     '/pwa-install.js',
     '/manifest.json',
     '/onlinegameadd.json',
+
+'/offlineicon',
+    '/offlineicon/memory-match/icon.png',
+    '/offlineicon/pong/icon.png',
+    '/offlineicon/snake/icon.png',
+    '/offlineicon/tetris/icon.png',
+    '/offlineicon/tic-tac-toe/icon.png',
+    
+    '/offline-games',
+    '/offline-games/memory-match',
+    '/offline-games/memory-match/index.html',
+    '/offline-games/memory-match/script.js',
+    '/offline-games/memory-match/style.css',
+    
+    '/offline-games/pong',
+    '/offline-games/pong/index.html',
+    '/offline-games/pong/script.js',
+    '/offline-games/pong/style.css',
+    
+    '/offline-games',
+    '/onlinegameadd.json',
+    '/onlinegameadd.json',
+    '/onlinegameadd.json',
+    
+    '/offline-games',
+    '/onlinegameadd.json',
+    '/onlinegameadd.json',
+    '/onlinegameadd.json',
+    
+    '/offline-games',
+    '/onlinegameadd.json',
+    '/onlinegameadd.json',
+    '/onlinegameadd.json',
+    
+    
+    '/icon/icon-128.png',
+     '/icon/icon-96.png',
+     '/icon/icon-72.png',
+     '/icon/icon-512.png',
+     '/icon/icon-384.png',
+     '/icon/icon-192.png',
+     '/icon/icon-152.png',
+     '/icon/icon-144.png',
+
     '/offlinegameadd.json'
 ];
 
